@@ -1,3 +1,5 @@
-/**
- * Created by kipppys on 30/10/14.
- */
+Player = function(game, x, y, img){
+    Phaser.Sprite.call(this, game, x, y, img);
+
+
+}
