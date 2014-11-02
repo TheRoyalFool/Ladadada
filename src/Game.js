@@ -1,7 +1,7 @@
 window.onload = function(){
 
-    var game = new Phaser.Game(1200,800,Phaser.AUTO,'container',
-        {preload: preload, create: create, update: update});
+    var game = new Phaser.Game(800,600,Phaser.AUTO,'container',
+        {preload: preload, create: create, update: update, render: render});
 
 
 
@@ -9,9 +9,7 @@ window.onload = function(){
         game.load.image('playerimg','assets/player.PNG');
 
         game.load.tilemap('map', 'assets/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
-        game.load.image('level', 'assets/tileset.png');
-
-
+        game.load.image('tileset', 'assets/tileset.png');
     }
 
     var player;
@@ -24,31 +22,45 @@ window.onload = function(){
 
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        player = new Player(game, 100, 100, 'playerimg', 1, 10, 0.1);
-        game.add.existing(player);
-
         map = game.add.tilemap('map');
+
+        map.addTilesetImage('tileset');
 
         layer = map.createLayer('Tile Layer 1');
 
-        map.setCollisionBetween(1, 5);
+        map.setCollision(1,true,layer);
 
         layer.resizeWorld();
 
-        game.physics.arcade.enable(player);
+        player = new Player(game, 100, 100, 'playerimg', 300, 300);
+
+        game.add.existing(player);
+
+        game.physics.enable(player, Phaser.Physics.ARCADE);
 
         //give the player some physics values and dont allow him to exit the screen
         player.body.bounce.y = 0.2;
-        player.body.gravity.y = 300;
-
+        player.body.gravity.y = 600;
+        player.body.collideWorldBounds = true;
+        player.body.setSize(64 ,64);
 
         game.camera.follow(player);
-
 
     }
 
     function update(){
 
+        this.physics.arcade.collide(player, layer);
+
+        if(player.body.onFloor() && game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) ||
+            player.body.onFloor() && game.input.keyboard.isDown(Phaser.Keyboard.W)){
+            player.body.velocity.y = -player.jumpHeight;
+        }
+
+    }
+
+    function render(){
+        game.debug.text(player.x);
     }
 
 }
