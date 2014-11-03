@@ -7,6 +7,7 @@ window.onload = function(){
 
     function preload(){
         game.load.image('playerimg','assets/player.PNG');
+        game.load.image('enemyimg', 'assets/enemy.jpg');
 
         game.load.tilemap('map', 'assets/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('tileset', 'assets/tileset.png');
@@ -39,7 +40,6 @@ window.onload = function(){
         game.physics.enable(player, Phaser.Physics.ARCADE);
 
         //give the player some physics values and dont allow him to exit the screen
-        player.body.bounce.y = 0.2;
         player.body.gravity.y = 600;
         player.body.collideWorldBounds = true;
         player.body.setSize(64 ,64);
@@ -51,11 +51,6 @@ window.onload = function(){
     function update(){
 
         this.physics.arcade.collide(player, layer);
-
-        if(player.body.onFloor() && game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) ||
-            player.body.onFloor() && game.input.keyboard.isDown(Phaser.Keyboard.W)){
-            player.body.velocity.y = -player.jumpHeight;
-        }
 
     }
 
