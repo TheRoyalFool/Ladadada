@@ -19,7 +19,8 @@ window.onload = function(){
     var layer;
     var map;
     var bullets;
-    var bullet;
+    var bulletTime = 0;
+    var bulletDelay = 150;
 
     function create(){
 
@@ -46,20 +47,22 @@ window.onload = function(){
         game.camera.follow(player);
 
         bullets = game.add.group();
-
-        bullet = new Bullet(game, 0, 0,'bull', 150, Player);
-
+        bullets.setAll('outOfBoundsKill', true);
+        bullets.setAll('checkWorldBounds', true);
     }
 
     function update(){
 
         this.physics.arcade.collide(player, layer);
 
-        if (game.input.mousePointer.isDown)
+        if (game.input.mousePointer.isDown && bulletTime < game.time.now)
         {
-            console.log('fire!');
-            bullets.create(new Bullet(game, player.x, player.y,'bull',150,'left'));
-
+            var bullet = new Bullet(game, player.x+player.width/2, player.y+player.height/2, 'bull', 400, player.dir);
+            bullet.anchor.x = 0.5;
+            bullet.anchor.y = 0.5;
+            game.physics.enable(bullet, Phaser.Physics.ARCADE);
+            bullets.add(bullet);
+            bulletTime = game.time.now + bulletDelay;
         }
     }
 

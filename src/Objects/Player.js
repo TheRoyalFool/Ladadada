@@ -7,6 +7,7 @@ Player = function(game, x, y, img, speed, jumpHeight) {
     this.jumpHeight = jumpHeight;
     this.dir = 'right';
 }
+
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 

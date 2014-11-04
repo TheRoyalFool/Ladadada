@@ -1,19 +1,19 @@
-Bullet = function(game, x, y, img, speed, player){
+Bullet = function(game, x, y, img, speed, dir){
     Phaser.Sprite.call(this, game, x, y, img);
-    this.x = player.x;
-    this.y = player.y;
+    this.x = this.x;
+    this.y = this.y;
     this.img = img;
     this.speed = speed;
-    this.dir = player.dir;
+    this.dir = dir;
 }
 
-Bullet.prototype.object.create(Phaser.Sprite.prototype);
+Bullet.prototype = Object.create(Phaser.Sprite.prototype);
 Bullet.prototype.constructor = Bullet;
 
 Bullet.prototype.update = function(){
-    if(this.dir = 'left'){
-        this.body.velocity = -this.speed;
+    if(this.dir == 'left'){
+        this.body.velocity.x = -this.speed;
     } else {
-        this.body.velocity = this.speed;
+        this.body.velocity.x = this.speed;
     }
 }
