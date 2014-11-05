@@ -9,18 +9,26 @@ window.onload = function(){
         game.load.image('playerimg','assets/player.PNG');
         game.load.image('enemyimg', 'assets/enemy.jpg');
         game.load.image('bull', 'assets/bullet.jpg');
-
+        game.load.image('itemimg', 'assets/item.png');
 
         game.load.tilemap('map', 'assets/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('tileset', 'assets/tileset.png');
     }
 
+    //variable for player
     var player;
+
+    //variables for each layer on the tilemap
     var layer;
+    //map variable
     var map;
-    var bullets;
+    //player bullets variable and bullet fire timing
+    var playerBullets;
     var bulletTime = 0;
+
+    //enemy and item group variables
     var enemyGroup;
+    var itemGroup;
 
     function create(){
 
@@ -42,13 +50,17 @@ window.onload = function(){
         game.camera.follow(player);
 
         //create the bullets group and kill them when they reach the edge of the world
-        bullets = game.add.group();
-        bullets.setAll('outOfBoundsKill', true);
-        bullets.setAll('checkWorldBounds', true);
+        playerBullets = game.add.group();
+        playerBullets.setAll('outOfBoundsKill', true);
+        playerBullets.setAll('checkWorldBounds', true);
 
         enemyGroup = game.add.group();
         var enemy = new Enemy(game, 100, 100, 'enemyimg', 300, 'bullet');
         enemyGroup.add(enemy);
+
+        itemGroup = game.add.group();
+        var item = new Item(game, 200, 100, 'itemimg', 'item');
+        itemGroup.add(item);
     }
 
     function update(){
@@ -56,16 +68,23 @@ window.onload = function(){
         //make the player collide with the ground and platforms
         game.physics.arcade.collide(player, layer);
         game.physics.arcade.collide(enemyGroup, layer);
-        game.physics.arcade.collide(bullets,enemyGroup,bulletHitEnemy);
+        game.physics.arcade.collide(playerBullets,enemyGroup,bulletHitEnemy);
+
+        for(var i = 0; i < enemyGroup.length; i++) {
+            if(enemyGroup.getAt(i).health <= 0) {
+                enemyGroup.getAt(i).remove;
+                enemyGroup.getAt(i).destroy;
+            }
+            game.physics.arcade.collide(enemyGroup.getAt(i).bullets, player, playerHitByEnemy);
+        }
         //check for the mouse click
         if (game.input.mousePointer.isDown && bulletTime < game.time.now)
         {
             //create new bullet at players position
             var bullet = new Bullet(game, player.x+player.width/2, player.y+player.height/2, 'bull', 400, player.dir);
 
-
             //add the bullet to the bullets group
-            bullets.add(bullet);
+            playerBullets.add(bullet);
             //reset the bullet delay
             bulletTime = game.time.now + player.bulletDelay;
         }
@@ -80,4 +99,10 @@ window.onload = function(){
         enemy.damage(1);
     }
 
+
+    function playerHitByEnemy(player, enemyBullet){
+        player.damage(1);
+        enemyBullet.damage(1);
+        console.log(player.health);
+    }
 }

@@ -15,6 +15,7 @@ Player = function(game, x, y, img, speed, jumpHeight, bulletDelay) {
     //give the player some physics values and dont allow him to exit the screen
     this.body.collideWorldBounds = true;
     this.body.setSize(64 ,64);
+
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -38,6 +39,8 @@ Player.prototype.update = function(){
         this.body.onFloor() && this.game.input.keyboard.isDown(Phaser.Keyboard.W)){
         this.body.velocity.y = -this.jumpHeight;
     }
+
+    //console.log(this.body.velocity.y);
 
     //cap the falling speed of the player
     if(this.body.velocity.y > 1000){
