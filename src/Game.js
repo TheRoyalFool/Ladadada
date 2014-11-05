@@ -88,10 +88,15 @@ window.onload = function(){
             //reset the bullet delay
             bulletTime = game.time.now + player.bulletDelay;
         }
+
+        game.physics.arcade.overlap(player,enemyGroup.getAt(0).sight,  function(rect, sprite){
+
+            //console.log('player collides with sight');
+        });
     }
 
     function render(){
-        game.debug.text(player.x);
+        game.debug.geom( enemyGroup.getAt(0).rectD, 'rgba(255,0,255,1)' ) ;
     }
 
     function bulletHitEnemy(bullet, enemy){
