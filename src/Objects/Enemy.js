@@ -20,7 +20,7 @@ Enemy.prototype.constructor = Enemy;
 Enemy.prototype.update = function(){
 
     //check for the mouse click
-    if (this.game.input.mousePointer.isDown) {
+    if (this.game.input.mousePointer.isDown && this.alive == true) {
         this.bullet = new Bullet(this.game, this.x + this.body.width/2, this.y + this.body.height/2, 'bull', 300, 'right');
         this.bullets.add(this.bullet);
 

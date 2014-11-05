@@ -72,8 +72,8 @@ window.onload = function(){
 
         for(var i = 0; i < enemyGroup.length; i++) {
             if(enemyGroup.getAt(i).health <= 0) {
-                enemyGroup.getAt(i).remove;
                 enemyGroup.getAt(i).destroy;
+                enemyGroup.getAt(i).remove;
             }
             game.physics.arcade.collide(enemyGroup.getAt(i).bullets, player, playerHitByEnemy);
         }
