@@ -35,7 +35,7 @@ window.onload = function(){
         game.physics.arcade.gravity.y = 600;
 
         //create player and ad him to the game and give him physics
-        player = new Player(game, 100, 100, 'playerimg', 300, 300, 200);
+        player = new Player(game, 100, 100, 'playerimg', 300, 290, 200);
         game.add.existing(player);
 
         //make the camera follow the player

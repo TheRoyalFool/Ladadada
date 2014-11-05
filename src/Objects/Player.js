@@ -13,7 +13,6 @@ Player = function(game, x, y, img, speed, jumpHeight, bulletDelay) {
     game.physics.enable(this, Phaser.Physics.ARCADE);
 
     //give the player some physics values and dont allow him to exit the screen
-    this.body.gravity.y = 600;
     this.body.collideWorldBounds = true;
     this.body.setSize(64 ,64);
 }
