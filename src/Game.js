@@ -20,7 +20,7 @@ window.onload = function(){
     var map;
     var bullets;
     var bulletTime = 0;
-    var bulletDelay = 150;
+    var enemyGroup;
 
     function create(){
 
@@ -32,42 +32,52 @@ window.onload = function(){
         layer = map.createLayer('Tile Layer 1');
         map.setCollision(1,true,layer);
         layer.resizeWorld();
+        game.physics.arcade.gravity.y = 600;
 
         //create player and ad him to the game and give him physics
-        player = new Player(game, 100, 100, 'playerimg', 300, 300);
+        player = new Player(game, 100, 100, 'playerimg', 300, 300, 200);
         game.add.existing(player);
-        game.physics.enable(player, Phaser.Physics.ARCADE);
-
-        //give the player some physics values and dont allow him to exit the screen
-        player.body.gravity.y = 600;
-        player.body.collideWorldBounds = true;
-        player.body.setSize(64 ,64);
 
         //make the camera follow the player
         game.camera.follow(player);
 
+        //create the bullets group and kill them when they reach the edge of the world
         bullets = game.add.group();
         bullets.setAll('outOfBoundsKill', true);
         bullets.setAll('checkWorldBounds', true);
+
+        enemyGroup = game.add.group();
+        var enemy = new Enemy(game, 100, 100, 'enemyimg', 300, 'bullet');
+        enemyGroup.add(enemy);
     }
 
     function update(){
 
-        this.physics.arcade.collide(player, layer);
-
+        //make the player collide with the ground and platforms
+        game.physics.arcade.collide(player, layer);
+        game.physics.arcade.collide(enemyGroup, layer);
+        game.physics.arcade.collide(bullets,enemyGroup,bulletHitEnemy);
+        //check for the mouse click
         if (game.input.mousePointer.isDown && bulletTime < game.time.now)
         {
+            //create new bullet at players position
             var bullet = new Bullet(game, player.x+player.width/2, player.y+player.height/2, 'bull', 400, player.dir);
-            bullet.anchor.x = 0.5;
-            bullet.anchor.y = 0.5;
-            game.physics.enable(bullet, Phaser.Physics.ARCADE);
+
+
+            //add the bullet to the bullets group
             bullets.add(bullet);
-            bulletTime = game.time.now + bulletDelay;
+            //reset the bullet delay
+            bulletTime = game.time.now + player.bulletDelay;
         }
     }
 
     function render(){
         game.debug.text(player.x);
+    }
+
+    function bulletHitEnemy(bullet, enemy){
+        bullet.damage(1);
+        enemy.damage(1);
     }
 
 }

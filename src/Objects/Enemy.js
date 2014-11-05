@@ -6,6 +6,9 @@ Enemy = function(game, x, y, img, speed, type){
     this.y = y;
     this.speed = speed;
     this.type = type;
+
+    game.physics.enable(this, Phaser.Physics.ARCADE);
+
 }
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
