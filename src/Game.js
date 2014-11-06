@@ -95,10 +95,10 @@ window.onload = function(){
         });
     }
 
-    function render(){
-        game.debug.geom( enemyGroup.getAt(0).rectD, 'rgba(255,0,255,1)' ) ;
+    function render() {
+        this.game.debug.body(enemyGroup.getAt(0).sight, 'rgba(255,0,255,0.5)', false);
+        this.game.debug.bodyInfo(player, 0, 0);
     }
-
     function bulletHitEnemy(bullet, enemy){
         bullet.damage(1);
         enemy.damage(1);

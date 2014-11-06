@@ -16,7 +16,6 @@ Enemy = function(game, x, y, img, speed, type){
     game.physics.enable(this.sight, Phaser.Physics.ARCADE);
     this.sight.body.gravity = -game.physics.gravity;
     this.sight.body.setSize(500,128);
-   // this.rectD = new Phaser.Rectangle(this.sight.x, this.sight.y, this.sight.body.width, this.sight.body.height);
 
 }
 
@@ -34,9 +33,4 @@ Enemy.prototype.update = function(){
     this.sight.x = this.x;
     this.sight.y = this.y;
 
-    //this.rectD.x = this.sight.x;
-    //this.rectD.y = this.sight.y;
-
-    //this.rectD.width = this.sight.body.width;
-    //this.rectD.height = this.sight.body.height;
 }
