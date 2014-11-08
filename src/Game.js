@@ -20,6 +20,7 @@ window.onload = function(){
 
     //variables for each layer on the tilemap
     var layer;
+    var layer2;
     //map variable
     var map;
     //player bullets variable and bullet fire timing
@@ -38,13 +39,41 @@ window.onload = function(){
         map = game.add.tilemap('map');
         map.addTilesetImage('tileset');
         layer = map.createLayer('Tile Layer 1');
-        map.setCollision(1,true,layer);
+        layer2 = map.createLayer('Tile Layer 2');
+        map.setCollision(4,true,layer);
         layer.resizeWorld();
         game.physics.arcade.gravity.y = 600;
 
+        layer2.visible = false;
+
+        enemyGroup = game.add.group();
+        itemGroup = game.add.group();
+
+        var mapArray = layer2.getTiles(0,0,game.world.width, game.world.height);
+
+        for(var i = 0; i < mapArray.length; i++){
+            var myTile = mapArray[i];
+
+            if(myTile.index == 1){
+                //create player and ad him to the game and give him physics
+                player = new Player(game, myTile.worldX, myTile.worldY, 'playerimg', 300, 290, 200);
+                game.add.existing(player);
+            }
+
+            if(myTile.index == 2){
+                var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 300, 'bullet');
+                enemyGroup.add(enemy);
+            }
+
+            if(myTile.index == 3){
+                var item = new Item(game, myTile.worldX, myTile.worldY, 'itemimg', 'item');
+                itemGroup.add(item);
+            }
+        }
+
         //create player and ad him to the game and give him physics
-        player = new Player(game, 100, 100, 'playerimg', 300, 290, 200);
-        game.add.existing(player);
+        //player = new Player(game, 0, 100, 'playerimg', 300, 290, 200);
+       // game.add.existing(player);
 
         //make the camera follow the player
         game.camera.follow(player);
@@ -54,13 +83,13 @@ window.onload = function(){
         playerBullets.setAll('outOfBoundsKill', true);
         playerBullets.setAll('checkWorldBounds', true);
 
-        enemyGroup = game.add.group();
-        var enemy = new Enemy(game, 100, 100, 'enemyimg', 300, 'bullet');
-        enemyGroup.add(enemy);
+        //enemyGroup = game.add.group();
+        //var enemy = new Enemy(game, 100, 100, 'enemyimg', 300, 'bullet');
+        //enemyGroup.add(enemy);
 
-        itemGroup = game.add.group();
-        var item = new Item(game, 200, 100, 'itemimg', 'item');
-        itemGroup.add(item);
+        //itemGroup = game.add.group();
+        //var item = new Item(game, 200, 100, 'itemimg', 'item');
+        //itemGroup.add(item);
     }
 
     function update(){
