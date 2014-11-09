@@ -40,6 +40,15 @@ Player.prototype.update = function(){
         this.body.velocity.y = -this.jumpHeight;
     }
 
+    //player crouching
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.S)){
+        this.body.setSize(64 ,32 , 0, 32);
+        this.loadTexture('playercrouched');
+    } else if(this.game.input.keyboard.justReleased(Phaser.Keyboard.S)){
+        this.body.setSize(64 ,64, 0, 0);
+        this.loadTexture(this.playerImg);
+    }
+
     //console.log(this.body.velocity.y);
 
     //cap the falling speed of the player

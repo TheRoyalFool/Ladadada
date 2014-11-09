@@ -7,6 +7,7 @@ window.onload = function(){
 
     function preload(){
         game.load.image('playerimg','assets/player.PNG');
+        game.load.image('playercrouched', 'assets/playersmall.PNG');
         game.load.image('enemyimg', 'assets/enemy.jpg');
         game.load.image('bull', 'assets/bullet.jpg');
         game.load.image('itemimg', 'assets/item.png');
@@ -126,6 +127,7 @@ window.onload = function(){
 
     function render(){
         game.debug.geom( enemyGroup.getAt(0).rectD, 'rgba(255,0,255,1)' ) ;
+        game.debug.body(player, 'rgba(255,0,255,1)', false);
     }
 
     function bulletHitEnemy(bullet, enemy){
