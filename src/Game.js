@@ -106,6 +106,7 @@ window.onload = function(){
                 enemyGroup.getAt(i).remove;
             }
             game.physics.arcade.collide(enemyGroup.getAt(i).bullets, player, playerHitByEnemy);
+            game.physics.arcade.collide(enemyGroup.getAt(i).sight, player, enemySeesPlayer);
         }
         //check for the mouse click
         if (game.input.mousePointer.isDown && bulletTime < game.time.now)
@@ -126,8 +127,8 @@ window.onload = function(){
     }
 
     function render(){
-        game.debug.geom( enemyGroup.getAt(0).rectD, 'rgba(255,0,255,1)' ) ;
-        game.debug.body(player, 'rgba(255,0,255,1)', false);
+
+        game.debug.body(enemyGroup.getAt(0).sight, 'rgba(255,0,255,1)', false);
     }
 
     function bulletHitEnemy(bullet, enemy){
@@ -140,5 +141,9 @@ window.onload = function(){
         player.damage(1);
         enemyBullet.damage(1);
         console.log(player.health);
+    }
+
+    function enemySeesPlayer(player, enemy){
+        enemy.kill();
     }
 }
