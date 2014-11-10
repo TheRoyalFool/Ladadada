@@ -41,7 +41,7 @@ Enemy.prototype.update = function(){
     //this.rectD.height = this.sight.body.height;
 }
 
-Enemy.prototype.Fire = function(){
-    this.bullet = new Bullet(this.game, this.x + this.body.width/2, this.y + this.body.height/2, 'bull', 300, 'right');
+Enemy.prototype.Fire = function(dir){
+    this.bullet = new Bullet(this.game, this.x + this.body.width/2, this.y + this.body.height/2, 'bull', 300, dir);
     this.bullets.add(this.bullet);
 }
