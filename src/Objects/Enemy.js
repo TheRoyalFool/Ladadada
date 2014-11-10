@@ -17,6 +17,7 @@ Enemy = function(game, x, y, img, speed, type){
     this.sight.body.gravity = -game.physics.gravity;
     this.sight.body.setSize(500,64);
 
+    this.lastFired = 0;
 }
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
@@ -31,7 +32,15 @@ Enemy.prototype.update = function(){
 
 Enemy.prototype.Fire = function(dir){
 
-    //use the dir variable to fire the bullet in the right direction
-    this.bullet = new Bullet(this.game, this.x + this.body.width/2, this.y + this.body.height/2, 'bull', 300, dir);
-    this.bullets.add(this.bullet);
+    //allows the enemy to fire once every 10 seconds
+    if(this.lastFired < this.game.time.totalElapsedSeconds()) {
+
+        //use the dir variable to fire the bullet in the right direction
+        this.bullet = new Bullet(this.game, this.x + this.body.width / 2, this.y + this.body.height / 2, 'bull', 300, dir);
+        this.bullets.add(this.bullet);
+
+        //reset last fired
+        this.lastFired = this.game.time.totalElapsedSeconds() + 10;
+    }
 }
+

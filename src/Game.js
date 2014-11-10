@@ -151,13 +151,9 @@ window.onload = function(){
     }
 
     //the call back for when the player is hit by an enemy bullet
-    function playerHitByEnemy(player, enemyBullet){
+    function playerHitByEnemy(player, enemyBullet) {
         //damage the player and the enemy bullet by 1 and log the players health
         player.damage(1);
         enemyBullet.damage(1);
-        console.log(player.health);
-
-        //logs the enemy that hit the player
-        console.log(enemyGroup.getAt(currEnemy));
     }
 }
