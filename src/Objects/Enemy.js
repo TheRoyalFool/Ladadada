@@ -1,4 +1,4 @@
-Enemy = function(game, x, y, img, speed, type){
+Enemy = function(game, x, y, img, speed, type, jumpHeight){
     Phaser.Sprite.call(this, game, x, y, img);
 
     this.enemyImage = img;
@@ -6,6 +6,7 @@ Enemy = function(game, x, y, img, speed, type){
     this.y = y;
     this.speed = speed;
     this.type = type;
+    this.jumpHeight = jumpHeight;
     game.load.image('bull', 'assets/bullet');
     game.physics.enable(this, Phaser.Physics.ARCADE);
 
@@ -41,6 +42,18 @@ Enemy.prototype.Fire = function(dir){
 
         //reset last fired
         this.lastFired = this.game.time.totalElapsedSeconds() + 10;
+    }
+}
+
+Enemy.prototype.followPlayer = function(player){
+    if(player.x < this.x){
+        this.body.velocity.x = -this.speed;
+    } else if(player.x > this.x){
+        this.body.velocity.x = this.speed;
+    }
+
+    if(this.body.onWall()){
+        this.body.velocity.y = -this.jumpHeight;
     }
 }
 

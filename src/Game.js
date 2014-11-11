@@ -67,7 +67,7 @@ window.onload = function(){
             }
 
             if(myTile.index == 2){
-                var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 300, 'bullet');
+                var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'bullet', 250);
                 enemyGroup.add(enemy);
             }
 
@@ -117,7 +117,7 @@ window.onload = function(){
                 if(player.x > enemyGroup.getAt(i).x){
                     enemyGroup.getAt(i).Fire('right');
                 }
-
+                enemyGroup.getAt(i).followPlayer(player);
             });
         }
         //check for the mouse click
