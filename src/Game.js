@@ -32,9 +32,12 @@ window.onload = function(){
     var enemyGroup;
     var itemGroup;
 
+    //holds the current enemy being updated
+    var currEnemy;
+
     function create(){
 
-        //set up level, background, tilemap and layer collisions
+        //general level set up, background color, tile map, layers and collision, world size, gravity
         game.stage.backgroundColor = '#123465';
         game.physics.startSystem(Phaser.Physics.ARCADE);
         map = game.add.tilemap('map');
@@ -45,8 +48,10 @@ window.onload = function(){
         layer.resizeWorld();
         game.physics.arcade.gravity.y = 600;
 
+        //make the second layer invisible
         layer2.visible = false;
 
+        //set up enemy and item groups
         enemyGroup = game.add.group();
         itemGroup = game.add.group();
 
@@ -72,10 +77,6 @@ window.onload = function(){
             }
         }
 
-        //create player and ad him to the game and give him physics
-        //player = new Player(game, 0, 100, 'playerimg', 300, 290, 200);
-       // game.add.existing(player);
-
         //make the camera follow the player
         game.camera.follow(player);
 
@@ -84,13 +85,6 @@ window.onload = function(){
         playerBullets.setAll('outOfBoundsKill', true);
         playerBullets.setAll('checkWorldBounds', true);
 
-        //enemyGroup = game.add.group();
-        //var enemy = new Enemy(game, 100, 100, 'enemyimg', 300, 'bullet');
-        //enemyGroup.add(enemy);
-
-        //itemGroup = game.add.group();
-        //var item = new Item(game, 200, 100, 'itemimg', 'item');
-        //itemGroup.add(item);
     }
 
     function update(){
@@ -100,13 +94,31 @@ window.onload = function(){
         game.physics.arcade.collide(enemyGroup, layer);
         game.physics.arcade.collide(playerBullets,enemyGroup,bulletHitEnemy);
 
+        //cycle through the enemy group
         for(var i = 0; i < enemyGroup.length; i++) {
+
+            //set up global variable so when can check which enemy is being updated from anywhere
+            currEnemy = i;
+
+            //when an enemies health reaches 0 kill it and remove it from the group
             if(enemyGroup.getAt(i).health <= 0) {
-                enemyGroup.getAt(i).destroy;
+                enemyGroup.getAt(i).kill;
                 enemyGroup.getAt(i).remove;
             }
+            //check for collision between the player and the enemy bullets
             game.physics.arcade.collide(enemyGroup.getAt(i).bullets, player, playerHitByEnemy);
-            game.physics.arcade.collide(enemyGroup.getAt(i).sight, player, enemySeesPlayer);
+
+            //check for collision between enemies sight and plaer
+            game.physics.arcade.overlap(enemyGroup.getAt(i).sight, player, function(collplayer, enemy){
+                //if the player is to the left of the enemy fire left and the same for right
+                if(player.x < enemyGroup.getAt(i).x) {
+                    enemyGroup.getAt(i).Fire('left');
+                }
+                if(player.x > enemyGroup.getAt(i).x){
+                    enemyGroup.getAt(i).Fire('right');
+                }
+
+            });
         }
         //check for the mouse click
         if (game.input.activePointer.isDown && bulletTime < game.time.now)
@@ -122,31 +134,28 @@ window.onload = function(){
             bulletTime = game.time.now + player.bulletDelay;
 
         }
-
-        game.physics.arcade.overlap(player,enemyGroup.getAt(0).sight,  function(rect, sprite){
-
-            //console.log('player collides with sight');
-        });
     }
 
+    //general debugging and in house desk testing
     function render(){
 
         game.debug.body(enemyGroup.getAt(0).sight, 'rgba(255,0,255,1)', false);
+        //game.debug.bodyInfo(player, 0, 25);
+        //game.debug.bodyInfo(enemyGroup.getAt(0), 0, 175);
     }
 
+    //the call back for when the player's bullet hits an enemy
     function bulletHitEnemy(bullet, enemy){
+
+        //kill the player bullet and the enemy
         bullet.damage(1);
         enemy.damage(1);
     }
 
-
-    function playerHitByEnemy(player, enemyBullet){
+    //the call back for when the player is hit by an enemy bullet
+    function playerHitByEnemy(player, enemyBullet) {
+        //damage the player and the enemy bullet by 1 and log the players health
         player.damage(1);
         enemyBullet.damage(1);
-        console.log(player.health);
-    }
-
-    function enemySeesPlayer(player, enemy){
-        enemy.kill();
     }
 }

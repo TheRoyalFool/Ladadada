@@ -16,8 +16,8 @@ Enemy = function(game, x, y, img, speed, type){
     game.physics.enable(this.sight, Phaser.Physics.ARCADE);
     this.sight.body.gravity = -game.physics.gravity;
     this.sight.body.setSize(500,64);
-   // this.rectD = new Phaser.Rectangle(this.sight.x, this.sight.y, this.sight.body.width, this.sight.body.height);
 
+    this.lastFired = 0;
 }
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
@@ -25,23 +25,22 @@ Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.update = function(){
 
-    //check for the mouse click
-    if (this.game.input.mousePointer.isDown && this.alive == true) {
-        //this.bullet = new Bullet(this.game, this.x + this.body.width/2, this.y + this.body.height/2, 'bull', 300, 'right');
-        //this.bullets.add(this.bullet);
-    }
-
+    //set up the position of the sight sprite
     this.sight.x = this.x - (this.sight.body.width / 2) + (this.body.width/2);
     this.sight.y = this.y;
-
-    //this.rectD.x = this.sight.x;
-    //this.rectD.y = this.sight.y;
-
-    //this.rectD.width = this.sight.body.width;
-    //this.rectD.height = this.sight.body.height;
 }
 
-Enemy.prototype.Fire = function(){
-    this.bullet = new Bullet(this.game, this.x + this.body.width/2, this.y + this.body.height/2, 'bull', 300, 'right');
-    this.bullets.add(this.bullet);
+Enemy.prototype.Fire = function(dir){
+
+    //allows the enemy to fire once every 10 seconds
+    if(this.lastFired < this.game.time.totalElapsedSeconds()) {
+
+        //use the dir variable to fire the bullet in the right direction
+        this.bullet = new Bullet(this.game, this.x + this.body.width / 2, this.y + this.body.height / 2, 'bull', 300, dir);
+        this.bullets.add(this.bullet);
+
+        //reset last fired
+        this.lastFired = this.game.time.totalElapsedSeconds() + 10;
+    }
 }
+

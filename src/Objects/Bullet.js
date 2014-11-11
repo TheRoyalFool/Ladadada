@@ -10,6 +10,7 @@ Bullet = function(game, x, y, img, speed, dir){
 
     //add the bullet to the physics engine
     game.physics.enable(this, Phaser.Physics.ARCADE);
+
     //give the bullets no gravity
     this.body.gravity.y = -600;
 
@@ -19,7 +20,8 @@ Bullet.prototype = Object.create(Phaser.Sprite.prototype);
 Bullet.prototype.constructor = Bullet;
 
 Bullet.prototype.update = function(){
-    //move the bullet in the direction the player is facing
+
+    //move the bullet in the direction the object is facing
     if(this.dir == 'left'){
         this.body.velocity.x = -this.speed;
     } else if(this.dir == 'right'){
