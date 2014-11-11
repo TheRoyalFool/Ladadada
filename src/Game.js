@@ -109,15 +109,18 @@ window.onload = function(){
             game.physics.arcade.collide(enemyGroup.getAt(i).sight, player, enemySeesPlayer);
         }
         //check for the mouse click
-        if (game.input.mousePointer.isDown && bulletTime < game.time.now)
+        if (game.input.activePointer.isDown && bulletTime < game.time.now)
         {
             //create new bullet at players position
-            var bullet = new Bullet(game, player.x+player.width/2, player.y+player.height/2, 'bull', 400, player.dir);
-
+            var bullet = new Bullet(game, player.x+player.width/2, player.y+player.height/2, 'bull', 400);
+            //fire the bullet towards the pointer
+            bullet.playerFire();
             //add the bullet to the bullets group
             playerBullets.add(bullet);
+
             //reset the bullet delay
             bulletTime = game.time.now + player.bulletDelay;
+
         }
 
         game.physics.arcade.overlap(player,enemyGroup.getAt(0).sight,  function(rect, sprite){
