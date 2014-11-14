@@ -30,7 +30,8 @@ Bullet.prototype.update = function(){
 }
 
 Bullet.prototype.playerFire = function(){
-    this.game.physics.arcade.moveToPointer(this, 300);
+   this.game.physics.arcade.moveToPointer(this, 300);
+
 }
 
 
