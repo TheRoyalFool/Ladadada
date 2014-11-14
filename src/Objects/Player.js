@@ -16,6 +16,11 @@ Player = function(game, x, y, img, speed, jumpHeight, bulletDelay) {
     this.body.collideWorldBounds = true;
     this.body.setSize(64 ,64);
 
+    this.meleeRange = game.add.sprite(this.x, this.y, null);
+    game.physics.enable(this.meleeRange);
+    this.meleeRange.body.gravity = -game.physics.gravity;
+    this.meleeRange.body.setSize(160,64);
+
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -55,4 +60,7 @@ Player.prototype.update = function(){
     if(this.body.velocity.y > 1000){
         this.body.velocity.y = 1000;
     }
+
+    this.meleeRange.x = this.x - (this.meleeRange.body.width /2) + (this.body.width/2);
+    this.meleeRange.y = this.y;
 }

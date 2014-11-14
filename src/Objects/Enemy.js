@@ -19,6 +19,9 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight){
     this.sight.body.setSize(500,64);
 
     this.lastFired = 0;
+
+    this.followingPlayer = false;
+    this.followTime = 0;
 }
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
@@ -29,6 +32,10 @@ Enemy.prototype.update = function(){
     //set up the position of the sight sprite
     this.sight.x = this.x - (this.sight.body.width / 2) + (this.body.width/2);
     this.sight.y = this.y;
+
+    if(this.followTime < this.game.time.totalElapsedSeconds()){
+        this.followingPlayer = false;
+    }
 }
 
 Enemy.prototype.Fire = function(dir){

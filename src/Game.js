@@ -85,40 +85,61 @@ window.onload = function(){
         playerBullets.setAll('outOfBoundsKill', true);
         playerBullets.setAll('checkWorldBounds', true);
 
+        console.log(enemyGroup.length);
+
     }
 
     function update(){
 
         //make the player collide with the ground and platforms
         game.physics.arcade.collide(player, layer);
-        game.physics.arcade.collide(enemyGroup, layer);
-        game.physics.arcade.collide(playerBullets,enemyGroup,bulletHitEnemy);
+        if(enemyGroup.length > 0){
+            game.physics.arcade.collide(enemyGroup, layer);
+            game.physics.arcade.collide(playerBullets,enemyGroup,bulletHitEnemy);
 
-        //cycle through the enemy group
-        for(var i = 0; i < enemyGroup.length; i++) {
-
-            //set up global variable so when can check which enemy is being updated from anywhere
-            currEnemy = i;
-
-            //when an enemies health reaches 0 kill it and remove it from the group
-            if(enemyGroup.getAt(i).health <= 0) {
-                enemyGroup.getAt(i).kill;
-                enemyGroup.getAt(i).remove;
-            }
-            //check for collision between the player and the enemy bullets
-            game.physics.arcade.collide(enemyGroup.getAt(i).bullets, player, playerHitByEnemy);
-
-            //check for collision between enemies sight and plaer
-            game.physics.arcade.overlap(enemyGroup.getAt(i).sight, player, function(collplayer, enemy){
-                //if the player is to the left of the enemy fire left and the same for right
-                if(player.x < enemyGroup.getAt(i).x) {
-                    enemyGroup.getAt(i).Fire('left');
+            game.physics.arcade.overlap(enemyGroup, player.meleeRange, function(player, enemy){
+                if(game.input.keyboard.isDown(Phaser.Keyboard.M)){
+                    enemy.damage(1);
                 }
-                if(player.x > enemyGroup.getAt(i).x){
-                    enemyGroup.getAt(i).Fire('right');
-                }
-                enemyGroup.getAt(i).followPlayer(player);
             });
+
+            //check for collision between the player and the enemy bullets
+            game.physics.arcade.collide(enemyGroup.bullets, player, playerHitByEnemy);
+
+            //cycle through the enemy group
+            for(var i = 0; i < enemyGroup.length; i++) {
+
+                //set up global variable so when can check which enemy is being updated from anywhere
+                currEnemy = i;
+
+                //when an enemies health reaches 0 kill it and remove it from the group
+                if(enemyGroup.getAt(i).health <= 0) {
+                    //enemyGroup.getAt(i).kill;
+                    enemyGroup.remove(enemyGroup.getAt(i));
+                    console.log(enemyGroup.length);
+                }
+                //check for collision between the player and the enemy bullets
+                game.physics.arcade.collide(enemyGroup.getAt(i).bullets, player, playerHitByEnemy);
+
+                //check for collision between enemies sight and plaer
+                game.physics.arcade.overlap(enemyGroup.getAt(i).sight, player, function(collplayer, enemy){
+                    //if the player is to the left of the enemy fire left and the same for right
+                    if(player.x < enemyGroup.getAt(i).x) {
+                        enemyGroup.getAt(i).Fire('left');
+                    }
+                    if(player.x > enemyGroup.getAt(i).x){
+                        enemyGroup.getAt(i).Fire('right');
+                    }
+                    enemyGroup.getAt(i).followingPlayer = true;
+                    enemyGroup.getAt(i).followTime = game.time.totalElapsedSeconds() + 5;
+                });
+
+                if(enemyGroup.getAt(i).followingPlayer == true){
+                    enemyGroup.getAt(i).followPlayer(player);
+                }
+
+
+            }
         }
         //check for the mouse click
         if (game.input.activePointer.isDown && bulletTime < game.time.now)
@@ -132,16 +153,19 @@ window.onload = function(){
 
             //reset the bullet delay
             bulletTime = game.time.now + player.bulletDelay;
-
         }
     }
 
     //general debugging and in house desk testing
     function render(){
 
-        game.debug.body(enemyGroup.getAt(0).sight, 'rgba(255,0,255,1)', false);
+        if(enemyGroup.length > 0){
+            game.debug.body(enemyGroup.getAt(0).sight, 'rgba(255,0,255,1)', false);
+        }
+        game.debug.body(player.meleeRange, 'rgba(255,255,0,1)', false);
         //game.debug.bodyInfo(player, 0, 25);
         //game.debug.bodyInfo(enemyGroup.getAt(0), 0, 175);
+
     }
 
     //the call back for when the player's bullet hits an enemy
