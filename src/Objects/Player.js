@@ -21,12 +21,23 @@ Player = function(game, x, y, img, speed, jumpHeight, bulletDelay) {
     this.meleeRange.body.gravity = -game.physics.gravity;
     this.meleeRange.body.setSize(160,64);
 
+    this.ability = game.add.sprite(this.x, this.y, 'flare');
+
+    this.ability.animations.add('flare');
+
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
+
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.F)){
+       this.ability.animations.play('flare', 8, true);
+    }
+
+    //this.ability.x = this.x;
+    //this.ability.y = this.y;
 
     //player movement
     if(this.game.input.keyboard.isDown(Phaser.Keyboard.A)){

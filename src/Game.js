@@ -14,6 +14,8 @@ window.onload = function(){
 
         game.load.tilemap('map', 'assets/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('tileset', 'assets/tileset.png');
+
+        game.load.spritesheet('flare', 'assets/SolarFlare.png', 64, 64, 16);
     }
 
     //variable for player
@@ -36,6 +38,9 @@ window.onload = function(){
     var currEnemy;
 
     function create(){
+
+
+
 
         //general level set up, background color, tile map, layers and collision, world size, gravity
         game.stage.backgroundColor = '#123465';
@@ -86,6 +91,7 @@ window.onload = function(){
         playerBullets.setAll('checkWorldBounds', true);
 
         console.log(enemyGroup.length);
+
 
     }
 
