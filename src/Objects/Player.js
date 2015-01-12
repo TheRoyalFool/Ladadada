@@ -9,6 +9,8 @@ Player = function(game, x, y, img, speed, jumpHeight, bulletDelay) {
     this.bulletDelay = bulletDelay;
     this.health = 100;
 
+    game.load.image('bull', 'assets/bullet');
+
     //add the player to the physics engine
     game.physics.enable(this, Phaser.Physics.ARCADE);
 
@@ -16,14 +18,22 @@ Player = function(game, x, y, img, speed, jumpHeight, bulletDelay) {
     this.body.collideWorldBounds = true;
     this.body.setSize(64 ,64);
 
-    this.meleeRange = game.add.sprite(this.x, this.y, null);
+    //sets up sprite for players melee skill
+    this.meleeRange = game.add.sprite(this.body.width/2 - 80, 0, null);
     game.physics.enable(this.meleeRange);
     this.meleeRange.body.gravity = -game.physics.gravity;
     this.meleeRange.body.setSize(160,64);
+    this.addChild(this.meleeRange);
 
-    this.ability = game.add.sprite(this.x, this.y, 'flare');
+    //sets up one ability sprite and the animation
+    this.ability = game.add.sprite(0, 0, 'flare');
+    this.abilityAnim = this.ability.animations.add('flare');
+      this.addChild(this.ability);
+    this.ability.visible = false;
 
-    this.ability.animations.add('flare');
+    //creates a bullet group for the player and a variable for timing
+    this.bullets = game.add.group();
+    this.lastFired = 0;
 
 }
 
@@ -32,12 +42,16 @@ Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
 
+    //checks if the f key has been pressed and plays the ability animation if it has been
     if(this.game.input.keyboard.isDown(Phaser.Keyboard.F)){
-       this.ability.animations.play('flare', 8, true);
+        this.ability.animations.play('flare', 8, false);
+        this.ability.visible = true;
     }
 
-    //this.ability.x = this.x;
-    //this.ability.y = this.y;
+    //checks if the ability animation is over to make it invisible again
+    if(this.abilityAnim.isFinished == true){
+        this.ability.visible = false;
+    }
 
     //player movement
     if(this.game.input.keyboard.isDown(Phaser.Keyboard.A)){
@@ -72,6 +86,18 @@ Player.prototype.update = function(){
         this.body.velocity.y = 1000;
     }
 
-    this.meleeRange.x = this.x - (this.meleeRange.body.width /2) + (this.body.width/2);
-    this.meleeRange.y = this.y;
+    //check for the mouse click
+    if (this.game.input.activePointer.isDown && this.lastFired < this.game.time.now)
+    {
+        //allows the enemy to fire once every 10 seconds
+        if(this.lastFired < this.game.time.now) {
+
+            //use the dir variable to fire the bullet in the right direction
+            this.bullet = new Bullet(this.game, this.x + this.body.width / 2, this.y + this.body.height / 2, 'bull', 300);
+            this.bullets.add(this.bullet);
+
+            //reset last fired
+            this.lastFired = this.game.time.now + this.bulletDelay;
+        }
+    }
 }

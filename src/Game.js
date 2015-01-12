@@ -6,16 +6,24 @@ window.onload = function(){
 
 
     function preload(){
+        //loa player images
         game.load.image('playerimg','assets/player.PNG');
         game.load.image('playercrouched', 'assets/playersmall.PNG');
+
+        //load enemy image
         game.load.image('enemyimg', 'assets/enemy.jpg');
+
+        //load item & bullet image
         game.load.image('bull', 'assets/bullet.jpg');
         game.load.image('itemimg', 'assets/item.png');
 
+        //load tile map and tileset for the level
         game.load.tilemap('map', 'assets/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('tileset', 'assets/tileset.png');
 
+        //loads the example for the animation
         game.load.spritesheet('flare', 'assets/SolarFlare.png', 64, 64, 16);
+
     }
 
     //variable for player
@@ -24,11 +32,9 @@ window.onload = function(){
     //variables for each layer on the tilemap
     var layer;
     var layer2;
+
     //map variable
     var map;
-    //player bullets variable and bullet fire timing
-    var playerBullets;
-    var bulletTime = 0;
 
     //enemy and item group variables
     var enemyGroup;
@@ -38,9 +44,6 @@ window.onload = function(){
     var currEnemy;
 
     function create(){
-
-
-
 
         //general level set up, background color, tile map, layers and collision, world size, gravity
         game.stage.backgroundColor = '#123465';
@@ -60,22 +63,28 @@ window.onload = function(){
         enemyGroup = game.add.group();
         itemGroup = game.add.group();
 
+        //map array for placing all the objects
         var mapArray = layer2.getTiles(0,0,game.world.width, game.world.height);
 
+        //loop through all the tiles in the map
         for(var i = 0; i < mapArray.length; i++){
+            //create a variable to test against the tiles
             var myTile = mapArray[i];
 
+            //if the tile index is equal to one
             if(myTile.index == 1){
-                //create player and ad him to the game and give him physics
+                //create player and add him to the game and give him physics
                 player = new Player(game, myTile.worldX, myTile.worldY, 'playerimg', 300, 290, 200);
                 game.add.existing(player);
             }
 
+            //if the tile index is 2 create an enemy at that tiles position and add him to the game
             if(myTile.index == 2){
                 var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'bullet', 250);
                 enemyGroup.add(enemy);
             }
 
+            //if the tiles index is 3 then add an item to the game and place it at the tiles position
             if(myTile.index == 3){
                 var item = new Item(game, myTile.worldX, myTile.worldY, 'itemimg', 'item');
                 itemGroup.add(item);
@@ -85,25 +94,26 @@ window.onload = function(){
         //make the camera follow the player
         game.camera.follow(player);
 
-        //create the bullets group and kill them when they reach the edge of the world
-        playerBullets = game.add.group();
-        playerBullets.setAll('outOfBoundsKill', true);
-        playerBullets.setAll('checkWorldBounds', true);
-
+        //log the amount of enemies spawned in on the map
         console.log(enemyGroup.length);
-
-
     }
 
     function update(){
 
         //make the player collide with the ground and platforms
         game.physics.arcade.collide(player, layer);
+        //check that there is at least one enemy on the map
         if(enemyGroup.length > 0){
-            game.physics.arcade.collide(enemyGroup, layer);
-            game.physics.arcade.collide(playerBullets,enemyGroup,bulletHitEnemy);
 
+            //make the enemies collide with the ground
+            game.physics.arcade.collide(enemyGroup, layer);
+
+            //if the player's bullets hit any of the enemies then call bulletHitEnemy
+            game.physics.arcade.collide(player.bullets,enemyGroup,bulletHitEnemy);
+
+            //if the player's melee range and an enemy are overlapping
             game.physics.arcade.overlap(enemyGroup, player.meleeRange, function(player, enemy){
+                //if the M button is pressed then the enemy takes damage
                 if(game.input.keyboard.isDown(Phaser.Keyboard.M)){
                     enemy.damage(1);
                 }
@@ -127,8 +137,9 @@ window.onload = function(){
                 //check for collision between the player and the enemy bullets
                 game.physics.arcade.collide(enemyGroup.getAt(i).bullets, player, playerHitByEnemy);
 
-                //check for collision between enemies sight and plaer
+                //check for collision between enemies sight and player
                 game.physics.arcade.overlap(enemyGroup.getAt(i).sight, player, function(collplayer, enemy){
+
                     //if the player is to the left of the enemy fire left and the same for right
                     if(player.x < enemyGroup.getAt(i).x) {
                         enemyGroup.getAt(i).Fire('left');
@@ -136,29 +147,17 @@ window.onload = function(){
                     if(player.x > enemyGroup.getAt(i).x){
                         enemyGroup.getAt(i).Fire('right');
                     }
+
+                    //player is set to follow the player for a set ammount of time
                     enemyGroup.getAt(i).followingPlayer = true;
                     enemyGroup.getAt(i).followTime = game.time.totalElapsedSeconds() + 5;
                 });
 
+                //if the enemy is following the player then send the players position to the enemy
                 if(enemyGroup.getAt(i).followingPlayer == true){
                     enemyGroup.getAt(i).followPlayer(player);
                 }
-
-
             }
-        }
-        //check for the mouse click
-        if (game.input.activePointer.isDown && bulletTime < game.time.now)
-        {
-            //create new bullet at players position
-            var bullet = new Bullet(game, player.x+player.width/2, player.y+player.height/2, 'bull', 400);
-            //fire the bullet towards the pointer
-            bullet.playerFire();
-            //add the bullet to the bullets group
-            playerBullets.add(bullet);
-
-            //reset the bullet delay
-            bulletTime = game.time.now + player.bulletDelay;
         }
     }
 
@@ -188,4 +187,6 @@ window.onload = function(){
         player.damage(1);
         enemyBullet.damage(1);
     }
+
+
 }

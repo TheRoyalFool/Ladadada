@@ -10,16 +10,18 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight){
     game.load.image('bull', 'assets/bullet');
     game.physics.enable(this, Phaser.Physics.ARCADE);
 
+    //enemy bullet group declaration
     this.bullets = game.add.group();
     this.bullet = new Bullet(game, this.x, this.y, img, 300, 'right');
+    this.lastFired = 0;
 
+    //enemy sight sprite for seeing player
     this.sight = game.add.sprite(this.x, this.y, null);
     game.physics.enable(this.sight, Phaser.Physics.ARCADE);
     this.sight.body.gravity = -game.physics.gravity;
     this.sight.body.setSize(500,64);
 
-    this.lastFired = 0;
-
+    //variables for following the player
     this.followingPlayer = false;
     this.followTime = 0;
 }
@@ -33,6 +35,7 @@ Enemy.prototype.update = function(){
     this.sight.x = this.x - (this.sight.body.width / 2) + (this.body.width/2);
     this.sight.y = this.y;
 
+    //update follow time
     if(this.followTime < this.game.time.totalElapsedSeconds()){
         this.followingPlayer = false;
     }
@@ -52,6 +55,7 @@ Enemy.prototype.Fire = function(dir){
     }
 }
 
+//follows the player using the position given
 Enemy.prototype.followPlayer = function(player){
     if(player.x < this.x){
         this.body.velocity.x = -this.speed;
@@ -59,6 +63,7 @@ Enemy.prototype.followPlayer = function(player){
         this.body.velocity.x = this.speed;
     }
 
+    //jumps if enemy hits a wall
     if(this.body.onWall()){
         this.body.velocity.y = -this.jumpHeight;
     }

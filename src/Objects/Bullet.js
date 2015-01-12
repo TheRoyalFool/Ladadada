@@ -1,5 +1,7 @@
 Bullet = function(game, x, y, img, speed, dir){
     Phaser.Sprite.call(this, game, x, y, img);
+
+
     this.x = this.x;
     this.y = this.y;
     this.img = img;
@@ -14,6 +16,29 @@ Bullet = function(game, x, y, img, speed, dir){
     //give the bullets no gravity
     this.body.gravity.y = -600;
 
+    this.outOfBoundsKill = true;
+    this.checkWorldBounds = true;
+}
+
+Bullet = function(game, x, y, img, speed){
+    Phaser.Sprite.call(this, game, x, y, img);
+    this.x = this.x;
+    this.y = this.y;
+    this.img = img;
+    this.speed = speed;
+    this.anchor.x = 0.5;
+    this.anchor.y = 0.5;
+
+    //add the bullet to the physics engine
+    game.physics.enable(this, Phaser.Physics.ARCADE);
+
+    //give the bullets no gravity
+    this.body.gravity.y = -600;
+
+    this.outOfBoundsKill = true;
+    this.checkWorldBounds = true;
+
+    this.PlayerFire();
 }
 
 Bullet.prototype = Object.create(Phaser.Sprite.prototype);
@@ -27,11 +52,9 @@ Bullet.prototype.update = function(){
     } else if(this.dir == 'right'){
         this.body.velocity.x = this.speed;
     }
-}
-
-Bullet.prototype.playerFire = function(){
-   this.game.physics.arcade.moveToPointer(this, 300);
 
 }
 
-
+Bullet.prototype.PlayerFire = function(){
+    this.game.physics.arcade.moveToPointer(this, 300);
+}
