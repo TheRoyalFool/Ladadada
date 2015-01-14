@@ -19,7 +19,7 @@ Player = function(game, x, y, img, speed, jumpHeight, bulletDelay) {
     this.body.setSize(64 ,64);
 
     //sets up sprite for players melee skill
-    this.meleeRange = game.add.sprite(this.body.width/2 - 80, 0, null);
+    this.meleeRange = game.add.sprite(this.body.width/2 - 80, y, null);
     game.physics.enable(this.meleeRange);
     this.meleeRange.body.gravity = -game.physics.gravity;
     this.meleeRange.body.setSize(160,64);
@@ -28,7 +28,7 @@ Player = function(game, x, y, img, speed, jumpHeight, bulletDelay) {
     //sets up one ability sprite and the animation
     this.ability = game.add.sprite(0, 0, 'flare');
     this.abilityAnim = this.ability.animations.add('flare');
-      this.addChild(this.ability);
+    this.addChild(this.ability);
     this.ability.visible = false;
 
     //creates a bullet group for the player and a variable for timing

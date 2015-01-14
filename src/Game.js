@@ -61,6 +61,7 @@ window.onload = function(){
 
         //set up enemy and item groups
         enemyGroup = game.add.group();
+
         itemGroup = game.add.group();
 
         //map array for placing all the objects
@@ -81,7 +82,9 @@ window.onload = function(){
             //if the tile index is 2 create an enemy at that tiles position and add him to the game
             if(myTile.index == 2){
                 var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'flying', 250);
+
                 enemyGroup.add(enemy);
+
             }
 
             //if the tiles index is 3 then add an item to the game and place it at the tiles position
@@ -95,7 +98,7 @@ window.onload = function(){
         game.camera.follow(player);
 
         //log the amount of enemies spawned in on the map
-        console.log(enemyGroup.length);
+        //console.log(enemyGroup.length);
     }
 
     function update(){
@@ -152,6 +155,7 @@ window.onload = function(){
                     enemyGroup.getAt(i).followingPlayer = true;
 
                     enemyGroup.getAt(i).followTime = game.time.totalElapsedSeconds() + 5;
+
                 });
 
                 //if the enemy is following the player then send the players position to the enemy

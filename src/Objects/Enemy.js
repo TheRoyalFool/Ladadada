@@ -16,7 +16,7 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight){
     this.lastFired = 0;
 
     //enemy sight sprite for seeing player
-    this.sight = game.add.sprite(0, 0, null);
+    this.sight = game.add.sprite(x, y, null);
     game.physics.enable(this.sight, Phaser.Physics.ARCADE);
     this.sight.body.gravity = -game.physics.gravity;
     this.sight.body.setSize(500,64);
@@ -33,9 +33,6 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight){
 
     if(this.type == "flying"){
         this.sight.body.setSize(300,300);
-        //this.body.gravity  = -this.game.physics.gravity;
-        this.y  = this.y - this.body.height*2;
-
     } else if(this.type == "shooter"){
 
     } else if(this.type == "melee"){
@@ -44,11 +41,11 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight){
 
     }
 
-
     //set up the position of the sight sprite
     this.sight.x = 0 - (this.sight.body.width / 2) + (this.body.width/2);
     //set up the position of the sight sprite
     this.sight.y = 0 - (this.sight.body.height / 2) + (this.body.height/2);
+
 }
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
@@ -56,13 +53,10 @@ Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.update = function(){
 
-    this.body.x.velocity = -100;
-
     //update follow time
     if(this.followTime < this.game.time.totalElapsedSeconds()){
         this.followingPlayer = false;
     }
-
 
 }
 
