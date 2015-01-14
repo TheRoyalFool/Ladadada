@@ -16,14 +16,39 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight){
     this.lastFired = 0;
 
     //enemy sight sprite for seeing player
-    this.sight = game.add.sprite(this.x, this.y, null);
+    this.sight = game.add.sprite(0, 0, null);
     game.physics.enable(this.sight, Phaser.Physics.ARCADE);
     this.sight.body.gravity = -game.physics.gravity;
     this.sight.body.setSize(500,64);
+    this.addChild(this.sight);
 
     //variables for following the player
     this.followingPlayer = false;
     this.followTime = 0;
+
+    //set up the position of the sight sprite
+    this.sight.x = 0 - (this.sight.body.width / 2) + (this.body.width/2);
+    //set up the position of the sight sprite
+    //this.sight.y = 0 - (this.sight.body.height / 2);// + (this.body.height/2);
+
+    if(this.type == "flying"){
+        this.sight.body.setSize(300,300);
+        //this.body.gravity  = -this.game.physics.gravity;
+        this.y  = this.y - this.body.height*2;
+
+    } else if(this.type == "shooter"){
+
+    } else if(this.type == "melee"){
+
+    } else if(this.type == "exploding"){
+
+    }
+
+
+    //set up the position of the sight sprite
+    this.sight.x = 0 - (this.sight.body.width / 2) + (this.body.width/2);
+    //set up the position of the sight sprite
+    this.sight.y = 0 - (this.sight.body.height / 2) + (this.body.height/2);
 }
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
@@ -31,14 +56,14 @@ Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.update = function(){
 
-    //set up the position of the sight sprite
-    this.sight.x = this.x - (this.sight.body.width / 2) + (this.body.width/2);
-    this.sight.y = this.y;
+    this.body.x.velocity = -100;
 
     //update follow time
     if(this.followTime < this.game.time.totalElapsedSeconds()){
         this.followingPlayer = false;
     }
+
+
 }
 
 Enemy.prototype.Fire = function(dir){
@@ -51,21 +76,31 @@ Enemy.prototype.Fire = function(dir){
         this.bullets.add(this.bullet);
 
         //reset last fired
-        this.lastFired = this.game.time.totalElapsedSeconds() + 10;
+        this.lastFired = this.game.time.totalElapsedSeconds() + 1;
     }
+
 }
 
 //follows the player using the position given
-Enemy.prototype.followPlayer = function(player){
-    if(player.x < this.x){
-        this.body.velocity.x = -this.speed;
-    } else if(player.x > this.x){
-        this.body.velocity.x = this.speed;
-    }
+Enemy.prototype.followPlayer = function(player) {
 
-    //jumps if enemy hits a wall
-    if(this.body.onWall()){
-        this.body.velocity.y = -this.jumpHeight;
+    if (this.type == "melee") {
+
+        if (player.x < this.x) {
+            this.body.velocity.x = -this.speed;
+        } else if (player.x > this.x) {
+            this.body.velocity.x = this.speed;
+        }
+
+        //jumps if enemy hits a wall
+        if (this.body.onWall() && this.jumpHeight != null) {
+            this.body.velocity.y = -this.jumpHeight;
+        }
+    } else if (this.type == "flying"){
+
+        this.game.physics.arcade.moveToObject(this, player, this.speed);
+        console.log("follow player");
+
     }
 }
 

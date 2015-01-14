@@ -80,7 +80,7 @@ window.onload = function(){
 
             //if the tile index is 2 create an enemy at that tiles position and add him to the game
             if(myTile.index == 2){
-                var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'bullet', 250);
+                var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'flying', 250);
                 enemyGroup.add(enemy);
             }
 
@@ -150,6 +150,7 @@ window.onload = function(){
 
                     //player is set to follow the player for a set ammount of time
                     enemyGroup.getAt(i).followingPlayer = true;
+
                     enemyGroup.getAt(i).followTime = game.time.totalElapsedSeconds() + 5;
                 });
 

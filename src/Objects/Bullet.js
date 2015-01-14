@@ -18,9 +18,10 @@ Bullet = function(game, x, y, img, speed, dir){
 
     this.outOfBoundsKill = true;
     this.checkWorldBounds = true;
+    console.log(this.dir);
 }
 
-Bullet = function(game, x, y, img, speed){
+PlayerBullet = function(game, x, y, img, speed) {
     Phaser.Sprite.call(this, game, x, y, img);
     this.x = this.x;
     this.y = this.y;
@@ -43,6 +44,7 @@ Bullet = function(game, x, y, img, speed){
 
 Bullet.prototype = Object.create(Phaser.Sprite.prototype);
 Bullet.prototype.constructor = Bullet;
+Bullet.prototype.constructor = PlayerBullet;
 
 Bullet.prototype.update = function(){
 
