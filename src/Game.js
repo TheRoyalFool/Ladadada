@@ -12,6 +12,7 @@ window.onload = function(){
 
         //load enemy image
         game.load.image('enemyimg', 'assets/enemy.jpg');
+        game.load.image('smEnemy', 'assets/smallenemy.png');
 
         //load item & bullet image
         game.load.image('bull', 'assets/bullet.jpg');
@@ -81,7 +82,7 @@ window.onload = function(){
 
             //if the tile index is 2 create an enemy at that tiles position and add him to the game
             if(myTile.index == 2){
-                var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'flying', 250);
+                var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'shooter', 250, 1);
 
                 enemyGroup.add(enemy);
 
@@ -140,22 +141,17 @@ window.onload = function(){
                 //check for collision between the player and the enemy bullets
                 game.physics.arcade.collide(enemyGroup.getAt(i).bullets, player, playerHitByEnemy);
 
-                //check for collision between enemies sight and player
-                game.physics.arcade.overlap(enemyGroup.getAt(i).sight, player, function(collplayer, enemy){
 
-                    //if the player is to the left of the enemy fire left and the same for right
-                    if(player.x < enemyGroup.getAt(i).x) {
-                        enemyGroup.getAt(i).Fire('left');
-                    }
-                    if(player.x > enemyGroup.getAt(i).x){
-                        enemyGroup.getAt(i).Fire('right');
-                    }
+                //check for collision between Enemy's sight and player
+                game.physics.arcade.overlap(enemyGroup.getAt(i).sight, player, function(player, enemy){
 
-                    //player is set to follow the player for a set ammount of time
-                    enemyGroup.getAt(i).followingPlayer = true;
+                    enemyGroup.getAt(i).SightBehaviour(player);
 
-                    enemyGroup.getAt(i).followTime = game.time.totalElapsedSeconds() + 5;
+                });
 
+                game.physics.arcade.overlap(enemyGroup, player, function (player, enemy){
+                    enemyGroup.getAt(i).CollideBehaviour(player);
+                    console.log(player.health);
                 });
 
                 //if the enemy is following the player then send the players position to the enemy
@@ -164,6 +160,7 @@ window.onload = function(){
                 }
             }
         }
+
     }
 
     //general debugging and in house desk testing

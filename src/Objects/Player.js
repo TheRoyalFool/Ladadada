@@ -23,6 +23,7 @@ Player = function(game, x, y, img, speed, jumpHeight, bulletDelay) {
     game.physics.enable(this.meleeRange);
     this.meleeRange.body.gravity = -game.physics.gravity;
     this.meleeRange.body.setSize(160,64);
+
     this.addChild(this.meleeRange);
 
     //sets up one ability sprite and the animation

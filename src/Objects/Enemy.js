@@ -1,4 +1,4 @@
-Enemy = function(game, x, y, img, speed, type, jumpHeight){
+Enemy = function(game, x, y, img, speed, type, jumpHeight, dps){
     Phaser.Sprite.call(this, game, x, y, img);
 
     this.enemyImage = img;
@@ -7,13 +7,16 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight){
     this.speed = speed;
     this.type = type;
     this.jumpHeight = jumpHeight;
-    game.load.image('bull', 'assets/bullet');
+    this.dps = dps;
+   // game.load.image('bull', 'assets/bullet');
     game.physics.enable(this, Phaser.Physics.ARCADE);
 
     //enemy bullet group declaration
     this.bullets = game.add.group();
     this.bullet = new Bullet(game, this.x, this.y, img, 300, 'right');
-    this.lastFired = 0;
+    //Enemy attack timer
+    this.lastAttack = 0;
+    this.canAttack = true;
 
     //enemy sight sprite for seeing player
     this.sight = game.add.sprite(x, y, null);
@@ -28,9 +31,8 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight){
 
     //set up the position of the sight sprite
     this.sight.x = 0 - (this.sight.body.width / 2) + (this.body.width/2);
-    //set up the position of the sight sprite
-    //this.sight.y = 0 - (this.sight.body.height / 2);// + (this.body.height/2);
 
+    //set up diffrent variables for diffrent enemy types
     if(this.type == "flying"){
         this.sight.body.setSize(300,300);
     } else if(this.type == "shooter"){
@@ -56,6 +58,18 @@ Enemy.prototype.update = function(){
     //update follow time
     if(this.followTime < this.game.time.totalElapsedSeconds()){
         this.followingPlayer = false;
+        this.body.velocity.x = 0;
+    }
+
+    //allows the enemy to fire once every x seconds
+    if(this.lastAttack < this.game.time.totalElapsedSeconds()) {
+
+        this.canAttack = true;
+
+        //reset last fired
+        this.lastAttack = this.game.time.totalElapsedSeconds() + 1;
+    } else {
+        this.canAttack = false;
     }
 
 }
@@ -63,22 +77,32 @@ Enemy.prototype.update = function(){
 Enemy.prototype.Fire = function(dir){
 
     //allows the enemy to fire once every 10 seconds
-    if(this.lastFired < this.game.time.totalElapsedSeconds()) {
+    if(this.canAttack == true) {
 
         //use the dir variable to fire the bullet in the right direction
-        this.bullet = new Bullet(this.game, this.x + this.body.width / 2, this.y + this.body.height / 2, 'bull', 300, dir);
+        this.bullet = new Bullet(this.game, this.x + this.body.width / 2, this.y + this.body.height / 2, 'bull', 300, dir, this.dps);
         this.bullets.add(this.bullet);
 
         //reset last fired
-        this.lastFired = this.game.time.totalElapsedSeconds() + 1;
+        this.lastAttack = this.game.time.totalElapsedSeconds() + 1;
     }
 
 }
 
 //follows the player using the position given
 Enemy.prototype.followPlayer = function(player) {
+    if (this.type == "flying"){
 
-    if (this.type == "melee") {
+        this.game.physics.arcade.moveToXY(this, player.x + player.body.width/2, player.y + player.body.height/2, this.speed);
+
+    } else if(this.type == "shooter"){
+        if(player.x > this.x){
+            this.body.velocity.x = -this.speed;
+        } else if(player.x < this.x){
+            this.body.velocity.x = this.speed;
+        }
+    }
+    else if (this.type == "melee" || this.type == "exploder") {
 
         if (player.x < this.x) {
             this.body.velocity.x = -this.speed;
@@ -90,11 +114,51 @@ Enemy.prototype.followPlayer = function(player) {
         if (this.body.onWall() && this.jumpHeight != null) {
             this.body.velocity.y = -this.jumpHeight;
         }
-    } else if (this.type == "flying"){
+    }
+    //console.log("following");
+}
 
-        this.game.physics.arcade.moveToObject(this, player, this.speed);
-        console.log("follow player");
+Enemy.prototype.SightBehaviour = function(player){
+
+    if(this.type == "flying"){
 
     }
+    else if(this.type == "shooter"){
+         //if the player is to the left of the enemy fire left and the same for right
+        if(player.body.x < this.x) {
+           this.Fire('left');
+        }
+        if(player.body.x > this.x){
+           this.Fire('right');
+        }
+
+    } else if(this.type == "melee"){
+
+    } else if(this.type == "exploding"){
+
+    }
+
+    //player is set to follow the player for a set ammount of time
+    this.followingPlayer = true;
+    this.followTime = this.game.time.totalElapsedSeconds() + 5;
+
 }
+
+Enemy.prototype.CollideBehaviour = function(player){
+    if(this.type == "melee" || this.type == "flying"){
+        if(this.canAttack == true){
+
+            player.damage(this.dps);
+
+            this.lastAttack = this.game.time.totalElapsedSeconds() + 1;
+        }
+    }
+}
+
+
+
+
+
+
+
 

@@ -1,4 +1,4 @@
-Bullet = function(game, x, y, img, speed, dir){
+Bullet = function(game, x, y, img, speed, dir, dps){
     Phaser.Sprite.call(this, game, x, y, img);
 
 
@@ -7,6 +7,7 @@ Bullet = function(game, x, y, img, speed, dir){
     this.img = img;
     this.speed = speed;
     this.dir = dir;
+    this.dps = dps;
     this.anchor.x = 0.5;
     this.anchor.y = 0.5;
 
@@ -18,7 +19,6 @@ Bullet = function(game, x, y, img, speed, dir){
 
     this.outOfBoundsKill = true;
     this.checkWorldBounds = true;
-
 
     if(this.dir == null){
         this.PlayerFire();
