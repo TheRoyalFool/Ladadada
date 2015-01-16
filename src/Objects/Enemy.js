@@ -24,6 +24,7 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight, dps){
     this.sight.body.gravity = -game.physics.gravity;
     this.sight.body.setSize(500,64);
     this.addChild(this.sight);
+    this.seesPlayer = false;
 
     //variables for following the player
     this.followingPlayer = false;
@@ -91,16 +92,27 @@ Enemy.prototype.Fire = function(dir){
 
 //follows the player using the position given
 Enemy.prototype.followPlayer = function(player) {
+
+
     if (this.type == "flying"){
 
         this.game.physics.arcade.moveToXY(this, player.x + player.body.width/2, player.y + player.body.height/2, this.speed);
 
     } else if(this.type == "shooter"){
+
         if(player.x > this.x){
             this.body.velocity.x = -this.speed;
         } else if(player.x < this.x){
             this.body.velocity.x = this.speed;
         }
+
+        if((player.x + player.body.width) > this.sight.world.x && (player.x + player.body.width) < this.sight.world.x + 10){
+            this.body.velocity.x = 0;
+        } else if(player.x < (this.sight.world.x + this.sight.body.width) && player.x > this.sight.world.x + this.sight.body.width - 10){
+            this.body.velocity.x = 0;
+        }
+
+
     }
     else if (this.type == "melee" || this.type == "exploder") {
 
@@ -120,15 +132,16 @@ Enemy.prototype.followPlayer = function(player) {
 
 Enemy.prototype.SightBehaviour = function(player){
 
+
     if(this.type == "flying"){
 
     }
     else if(this.type == "shooter"){
          //if the player is to the left of the enemy fire left and the same for right
-        if(player.body.x < this.x) {
+        if(player.x < this.x) {
            this.Fire('left');
         }
-        if(player.body.x > this.x){
+        if(player.x > this.x){
            this.Fire('right');
         }
 
@@ -137,7 +150,6 @@ Enemy.prototype.SightBehaviour = function(player){
     } else if(this.type == "exploding"){
 
     }
-
     //player is set to follow the player for a set ammount of time
     this.followingPlayer = true;
     this.followTime = this.game.time.totalElapsedSeconds() + 5;

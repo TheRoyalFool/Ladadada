@@ -82,7 +82,7 @@ window.onload = function(){
 
             //if the tile index is 2 create an enemy at that tiles position and add him to the game
             if(myTile.index == 2){
-                var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'shooter', 250, 1);
+                var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'melee', 250, 1);
 
                 enemyGroup.add(enemy);
 
@@ -141,11 +141,18 @@ window.onload = function(){
                 //check for collision between the player and the enemy bullets
                 game.physics.arcade.collide(enemyGroup.getAt(i).bullets, player, playerHitByEnemy);
 
+                //stops a shooter enemy from moving too far away from the player
+                if(enemyGroup.getAt(i).type == "shooter"){
+                    enemyGroup.getAt(i).followingPlayer = false;
+                    enemyGroup.getAt(i).body.velocity.x = 0;
+                }
+
+                enemyGroup.getAt(i).seesPlayer = false;
 
                 //check for collision between Enemy's sight and player
                 game.physics.arcade.overlap(enemyGroup.getAt(i).sight, player, function(player, enemy){
 
-                    enemyGroup.getAt(i).SightBehaviour(player);
+                    enemyGroup.getAt(i).seesPlayer = true;
 
                 });
 
@@ -155,9 +162,16 @@ window.onload = function(){
                 });
 
                 //if the enemy is following the player then send the players position to the enemy
+                if(enemyGroup.getAt(i).seesPlayer == true){
+                    enemyGroup.getAt(i).SightBehaviour(player);
+                }
+
+                //if the enemy is following the player then send the players position to the enemy
                 if(enemyGroup.getAt(i).followingPlayer == true){
                     enemyGroup.getAt(i).followPlayer(player);
                 }
+
+
             }
         }
 
@@ -170,6 +184,7 @@ window.onload = function(){
             game.debug.body(enemyGroup.getAt(0).sight, 'rgba(255,0,255,1)', false);
         }
         game.debug.body(player.meleeRange, 'rgba(255,255,0,1)', false);
+
         //game.debug.bodyInfo(player, 0, 25);
         //game.debug.bodyInfo(enemyGroup.getAt(0), 0, 175);
 
