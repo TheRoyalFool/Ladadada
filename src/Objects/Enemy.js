@@ -8,13 +8,13 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight, dps){
     this.type = type;
     this.jumpHeight = jumpHeight;
     this.dps = dps;
-   // game.load.image('bull', 'assets/bullet');
+
     game.physics.enable(this, Phaser.Physics.ARCADE);
 
     //enemy bullet group declaration
     this.bullets = game.add.group();
     this.bullet = new Bullet(game, this.x, this.y, img, 300, 'right');
-    //Enemy attack timer
+    //Enemy attack timer variables
     this.lastAttack = 0;
     this.canAttack = true;
 
@@ -64,22 +64,16 @@ Enemy.prototype.update = function(){
 
     //allows the enemy to fire once every x seconds
     if(this.lastAttack < this.game.time.totalElapsedSeconds()) {
-
         this.canAttack = true;
-
-        //reset last fired
         this.lastAttack = this.game.time.totalElapsedSeconds() + 1;
     } else {
         this.canAttack = false;
     }
-
-
-
 }
 
 Enemy.prototype.Fire = function(dir){
 
-    //allows the enemy to fire once every 10 seconds
+    //allows the enemy to fire once every x seconds
     if(this.canAttack == true) {
 
         //use the dir variable to fire the bullet in the right direction
@@ -95,51 +89,52 @@ Enemy.prototype.Fire = function(dir){
 //follows the player using the position given
 Enemy.prototype.followPlayer = function(player) {
 
-
+    //movement for each enemy type
     if (this.type == "flying"){
 
+        //move the enemy to the players current x and y position
         this.game.physics.arcade.moveToXY(this, player.x + player.body.width/2, player.y + player.body.height/2, this.speed);
 
     } else if(this.type == "shooter"){
 
+        //move away from the player if he is within range
         if(player.x > this.x){
             this.body.velocity.x = -this.speed;
         } else if(player.x < this.x){
             this.body.velocity.x = this.speed;
         }
 
+        //this moves the enemy to a safe shooting distance
         if((player.x + player.body.width) > this.sight.world.x && (player.x + player.body.width) < this.sight.world.x + 10){
             this.body.velocity.x = 0;
         } else if(player.x < (this.sight.world.x + this.sight.body.width) && player.x > this.sight.world.x + this.sight.body.width - 10){
             this.body.velocity.x = 0;
         }
-
-
     }
     else if (this.type == "melee" || this.type == "exploding") {
 
+        //this moves the enemy towards the player if he can see him
         if (player.x < this.x) {
             this.body.velocity.x = -this.speed;
         } else if (player.x > this.x) {
             this.body.velocity.x = this.speed;
         }
 
-        //jumps if enemy hits a wall
+        //jump if he hits a wall
         if (this.body.onWall() && this.jumpHeight != null) {
             this.body.velocity.y = -this.jumpHeight;
         }
     }
-
 }
 
 Enemy.prototype.SightBehaviour = function(player){
-
 
     if(this.type == "flying"){
 
     }
     else if(this.type == "shooter"){
-         //if the player is to the left of the enemy fire left and the same for right
+
+        //if the player is to the left of the enemy fire left and the same for right
         if(player.x < this.x) {
            this.Fire('left');
         }
@@ -160,22 +155,16 @@ Enemy.prototype.SightBehaviour = function(player){
 }
 
 Enemy.prototype.CollideBehaviour = function(player){
+
+    //if the player collides with a melee or flying type enemy then he takes damage
     if(this.type == "melee" || this.type == "flying"){
         if(this.canAttack == true){
-
             player.damage(this.dps);
-
             this.lastAttack = this.game.time.totalElapsedSeconds() + 1;
         }
+    //if the player collides with an exploding enemy then he takes damage and kill the enemy
     } else if(this.type == "exploding"){
             player.damage(this.dps);
             this.kill();
     }
 }
-
-
-
-
-
-
-
