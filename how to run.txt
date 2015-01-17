@@ -1,0 +1,14 @@
+goto : https://www.apachefriends.org/index.html
+
+download and install xampp, take a note of where u put the installation folder.
+
+once it's installed run the control pannel and start the apache module
+
+where u installed xammp there should be a folder that has a holder called htdocs
+put this folder in there. so just the UwsPhaserProject folder, the entire thing.
+
+once thats done just goto chrome or whatever browser u use and type "localhost/UwsPhaserProject"
+and the game should just pop up :)
+
+obviously this version wont update itself but we can get that going once were back at uni, 
+or over skype its up to u guys

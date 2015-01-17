@@ -68,6 +68,8 @@ window.onload = function(){
         //map array for placing all the objects
         var mapArray = layer2.getTiles(0,0,game.world.width, game.world.height);
 
+        var e = 0;
+
         //loop through all the tiles in the map
         for(var i = 0; i < mapArray.length; i++){
             //create a variable to test against the tiles
@@ -82,10 +84,24 @@ window.onload = function(){
 
             //if the tile index is 2 create an enemy at that tiles position and add him to the game
             if(myTile.index == 2){
-                var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'melee', 250, 1);
+
+                switch (e){
+                    case 0:
+                        var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'flying', 250, 1);
+                        break;
+                    case 1:
+                        var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'exploding', 250, 1);
+                        break;
+                    case 2:
+                        var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'shooter', 250, 1);
+                        break;
+                    case 3:
+                        var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'melee', 250, 1);
+                        break;
+                }
 
                 enemyGroup.add(enemy);
-
+                e++;
             }
 
             //if the tiles index is 3 then add an item to the game and place it at the tiles position

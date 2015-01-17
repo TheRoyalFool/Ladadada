@@ -73,6 +73,8 @@ Enemy.prototype.update = function(){
         this.canAttack = false;
     }
 
+
+
 }
 
 Enemy.prototype.Fire = function(dir){
@@ -114,7 +116,7 @@ Enemy.prototype.followPlayer = function(player) {
 
 
     }
-    else if (this.type == "melee" || this.type == "exploder") {
+    else if (this.type == "melee" || this.type == "exploding") {
 
         if (player.x < this.x) {
             this.body.velocity.x = -this.speed;
@@ -127,7 +129,7 @@ Enemy.prototype.followPlayer = function(player) {
             this.body.velocity.y = -this.jumpHeight;
         }
     }
-    //console.log("following");
+
 }
 
 Enemy.prototype.SightBehaviour = function(player){
@@ -150,6 +152,7 @@ Enemy.prototype.SightBehaviour = function(player){
     } else if(this.type == "exploding"){
 
     }
+
     //player is set to follow the player for a set ammount of time
     this.followingPlayer = true;
     this.followTime = this.game.time.totalElapsedSeconds() + 5;
@@ -164,9 +167,11 @@ Enemy.prototype.CollideBehaviour = function(player){
 
             this.lastAttack = this.game.time.totalElapsedSeconds() + 1;
         }
+    } else if(this.type == "exploding"){
+            player.damage(this.dps);
+            this.kill();
     }
 }
-
 
 
 
