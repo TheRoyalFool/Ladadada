@@ -1,4 +1,4 @@
-Player = function(game, x, y, img, speed, jumpHeight, bulletDelay) {
+Player = function(game, x, y, img, speed, jumpHeight) {
     Phaser.Sprite.call(this, game, x, y, img);
     this.playerImg = img;
     this.x = x;
@@ -6,7 +6,7 @@ Player = function(game, x, y, img, speed, jumpHeight, bulletDelay) {
     this.speed = speed;
     this.jumpHeight = jumpHeight;
     this.dir = 'right';
-    this.bulletDelay = bulletDelay;
+
     this.health = 100;
 
     game.load.image('bull', 'assets/bullet');
@@ -23,19 +23,21 @@ Player = function(game, x, y, img, speed, jumpHeight, bulletDelay) {
     game.physics.enable(this.meleeRange);
     this.meleeRange.body.gravity = -game.physics.gravity;
     this.meleeRange.body.setSize(160,64);
-
     this.addChild(this.meleeRange);
 
-    //sets up one ability sprite and the animation
-    this.ability = game.add.sprite(0, 0, 'flare');
-    this.abilityAnim = this.ability.animations.add('flare');
+    this.minorAbillity = "";
+    this.majorAbillity = "";
+    this.ability = this.ability = game.add.sprite(0, 0, null);
+
+    if(this.majorAbillity == "Flare"){
+        //sets up one ability sprite and the animation
+        this.ability = game.add.sprite(0, 0, 'flare');
+        this.abilityAnim = this.ability.animations.add('flare');
+    }
     this.addChild(this.ability);
     this.ability.visible = false;
 
-    //creates a bullet group for the player and a variable for timing
-    this.bullets = game.add.group();
-    this.lastFired = 0;
-
+    this.ChangeGun("Hail");
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -43,15 +45,18 @@ Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
 
-    //checks if the f key has been pressed and plays the ability animation if it has been
-    if(this.game.input.keyboard.isDown(Phaser.Keyboard.F)){
-        this.ability.animations.play('flare', 8, false);
-        this.ability.visible = true;
-    }
+    //check that the current major ability has an animation
+    if(this.abilityAnim != null){
+        //checks if the f key has been pressed and plays the ability animation if it has been
+        if(this.game.input.keyboard.isDown(Phaser.Keyboard.F)){
+            this.ability.animations.play('flare', 8, false);
+            this.ability.visible = true;
+        }
 
-    //checks if the ability animation is over to make it invisible again
-    if(this.abilityAnim.isFinished == true){
-        this.ability.visible = false;
+        //checks if the ability animation is over to make it invisible again
+        if(this.abilityAnim.isFinished == true){
+            this.ability.visible = false;
+        }
     }
 
     //player movement
@@ -80,25 +85,28 @@ Player.prototype.update = function(){
         this.loadTexture(this.playerImg);
     }
 
-    //console.log(this.body.velocity.y);
-
     //cap the falling speed of the player
     if(this.body.velocity.y > 1000){
         this.body.velocity.y = 1000;
     }
 
-    //check for the mouse click
-    if (this.game.input.activePointer.isDown && this.lastFired < this.game.time.now)
-    {
-        //allows the enemy to fire once every 10 seconds
-        if(this.lastFired < this.game.time.now) {
 
-            //use the dir variable to fire the bullet in the right direction
-            this.bullet = new Bullet(this.game, this.x + this.body.width / 2, this.y + this.body.height / 2, 'bull', 300);
-            this.bullets.add(this.bullet);
+    this.playerGun.update(this.x + this.body.width / 2,  this.y + this.body.height / 2);
+}
 
-            //reset last fired
-            this.lastFired = this.game.time.now + this.bulletDelay;
-        }
+Player.prototype.ChangeGun = function(gun){
+    switch(gun){
+        case "Hail":
+            this.playerGun = new Gun(this.game, 0.1, 3, 10, 1);
+            break;
+        case "Buckshot":
+            this.playerGun = new Gun(this.game, 0.1, 3, 30, 1);
+            break;
+        case "Bullseye":
+            this.playerGun = new Gun(this.game, 0.1, 3, 30, 1);
+            break;
+        case "Potshot":
+            this.playerGun = new Gun(this.game, 3, 3, 30, 1);
+            break;
     }
 }

@@ -43,6 +43,7 @@ window.onload = function(){
 
     //holds the current enemy being updated
     var currEnemy;
+    var currItem;
 
     function create(){
 
@@ -68,8 +69,6 @@ window.onload = function(){
         //map array for placing all the objects
         var mapArray = layer2.getTiles(0,0,game.world.width, game.world.height);
 
-        var e = 0;
-
         //loop through all the tiles in the map
         for(var i = 0; i < mapArray.length; i++){
             //create a variable to test against the tiles
@@ -78,30 +77,14 @@ window.onload = function(){
             //if the tile index is equal to one
             if(myTile.index == 1){
                 //create player and add him to the game and give him physics
-                player = new Player(game, myTile.worldX, myTile.worldY, 'playerimg', 300, 290, 200);
+                player = new Player(game, myTile.worldX, myTile.worldY, 'playerimg', 300, 290);
                 game.add.existing(player);
             }
 
             //if the tile index is 2 create an enemy at that tiles position and add him to the game
             if(myTile.index == 2){
-
-                switch (e){
-                    case 0:
-                        var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'flying', 250, 1);
-                        break;
-                    case 1:
-                        var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'exploding', 250, 1);
-                        break;
-                    case 2:
-                        var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'shooter', 250, 1);
-                        break;
-                    case 3:
-                        var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'melee', 250, 1);
-                        break;
-                }
-
-                enemyGroup.add(enemy);
-                e++;
+                //var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'flying', 250, 1);
+                //enemyGroup.add(enemy);
             }
 
             //if the tiles index is 3 then add an item to the game and place it at the tiles position
@@ -122,6 +105,18 @@ window.onload = function(){
 
         //make the player collide with the ground and platforms
         game.physics.arcade.collide(player, layer);
+
+        for(var i = 0; i < itemGroup.length; i++){
+            currItem = i;
+
+        }
+
+        game.physics.arcade.overlap(itemGroup, player, function(player, item){
+
+            player.ChangeGun("Hail");
+            itemGroup.remove(item);
+        });
+
         //check that there is at least one enemy on the map
         if(enemyGroup.length > 0){
 
@@ -142,51 +137,52 @@ window.onload = function(){
             //check for collision between the player and the enemy bullets
             game.physics.arcade.collide(enemyGroup.bullets, player, playerHitByEnemy);
 
+
+
             //cycle through the enemy group
-            for(var i = 0; i < enemyGroup.length; i++) {
+            for(var e = 0; e < enemyGroup.length; e++) {
 
                 //set up global variable so when can check which enemy is being updated from anywhere
-                currEnemy = i;
+                currEnemy = e;
 
                 //when an enemies health reaches 0 kill it and remove it from the group
-                if(enemyGroup.getAt(i).health <= 0) {
+                if(enemyGroup.getAt(e).health <= 0) {
                     //enemyGroup.getAt(i).kill;
-                    enemyGroup.remove(enemyGroup.getAt(i));
+                    enemyGroup.remove(enemyGroup.getAt(e));
                     console.log(enemyGroup.length);
                 }
                 //check for collision between the player and the enemy bullets
-                game.physics.arcade.collide(enemyGroup.getAt(i).bullets, player, playerHitByEnemy);
+                game.physics.arcade.collide(enemyGroup.getAt(e).bullets, player, playerHitByEnemy);
 
                 //stops a shooter enemy from moving too far away from the player
-                if(enemyGroup.getAt(i).type == "shooter"){
-                    enemyGroup.getAt(i).followingPlayer = false;
-                    enemyGroup.getAt(i).body.velocity.x = 0;
+                if(enemyGroup.getAt(e).type == "shooter"){
+                    enemyGroup.getAt(e).followingPlayer = false;
+                    enemyGroup.getAt(e).body.velocity.x = 0;
                 }
 
-                enemyGroup.getAt(i).seesPlayer = false;
+                enemyGroup.getAt(e).seesPlayer = false;
 
                 //check for collision between Enemy's sight and player
-                game.physics.arcade.overlap(enemyGroup.getAt(i).sight, player, function(player, enemy){
+                game.physics.arcade.overlap(enemyGroup.getAt(e).sight, player, function(player, enemy){
 
-                    enemyGroup.getAt(i).seesPlayer = true;
+                    enemyGroup.getAt(e).seesPlayer = true;
 
                 });
 
                 game.physics.arcade.overlap(enemyGroup, player, function (player, enemy){
-                    enemyGroup.getAt(i).CollideBehaviour(player);
+                    enemyGroup.getAt(e).CollideBehaviour(player);
                     console.log(player.health);
                 });
 
                 //if the enemy is following the player then send the players position to the enemy
-                if(enemyGroup.getAt(i).seesPlayer == true){
-                    enemyGroup.getAt(i).SightBehaviour(player);
+                if(enemyGroup.getAt(e).seesPlayer == true){
+                    enemyGroup.getAt(e).SightBehaviour(player);
                 }
 
                 //if the enemy is following the player then send the players position to the enemy
-                if(enemyGroup.getAt(i).followingPlayer == true){
-                    enemyGroup.getAt(i).followPlayer(player);
+                if(enemyGroup.getAt(e).followingPlayer == true){
+                    enemyGroup.getAt(e).followPlayer(player);
                 }
-
 
             }
         }
