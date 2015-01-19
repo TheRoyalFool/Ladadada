@@ -37,6 +37,7 @@ Player = function(game, x, y, img, speed, jumpHeight) {
     this.addChild(this.ability);
     this.ability.visible = false;
 
+    //set up the players gun
     this.ChangeGun("Hail");
 }
 
@@ -90,10 +91,11 @@ Player.prototype.update = function(){
         this.body.velocity.y = 1000;
     }
 
-
+    //update the players gun
     this.playerGun.update(this.x + this.body.width / 2,  this.y + this.body.height / 2);
 }
 
+//function for changing the players gun
 Player.prototype.ChangeGun = function(gun){
     switch(gun){
         case "Hail":
