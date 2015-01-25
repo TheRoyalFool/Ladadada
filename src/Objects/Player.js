@@ -25,20 +25,27 @@ Player = function(game, x, y, img, speed, jumpHeight) {
     this.meleeRange.body.setSize(160,64);
     this.addChild(this.meleeRange);
 
-    this.minorAbillity = "";
-    this.majorAbillity = "";
-    this.ability = this.ability = game.add.sprite(0, 0, null);
+    this.minorAbillityTag = "";
+    this.majorAbillityTag = "";
+    this.doubleJump = false;
+    this.jumps = 0;
+    this.jumpsTimer = 0;
 
-    if(this.majorAbillity == "Flare"){
-        //sets up one ability sprite and the animation
-        this.ability = game.add.sprite(0, 0, 'flare');
-        this.abilityAnim = this.ability.animations.add('flare');
-    }
-    this.addChild(this.ability);
-    this.ability.visible = false;
+    this.slide = true;
+    this.canSlide = false;
+    this.slideCooldown = 0;
+
+    this.majorAbility = game.add.sprite(0, 0, null);
+    this.minorAbility = game.add.sprite(0, 0, null);
+
+    this.addChild(this.majorAbility);
+    this.addChild(this.minorAbility);
 
     //set up the players gun
     this.ChangeGun("Hail");
+
+    this.LeftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+    this.RightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -46,35 +53,83 @@ Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
 
-    //check that the current major ability has an animation
-    if(this.abilityAnim != null){
-        //checks if the f key has been pressed and plays the ability animation if it has been
-        if(this.game.input.keyboard.isDown(Phaser.Keyboard.F)){
-            this.ability.animations.play('flare', 8, false);
-            this.ability.visible = true;
-        }
-
-        //checks if the ability animation is over to make it invisible again
-        if(this.abilityAnim.isFinished == true){
-            this.ability.visible = false;
-        }
-    }
+    this.game.debug.text(this.canSlide, 10, 20);
+    //this.game.debug.text(this.RightKey.isUp, 10, 40);
 
     //player movement
-    if(this.game.input.keyboard.isDown(Phaser.Keyboard.A)){
-        this.body.velocity.x = -this.speed;
+    if(this.LeftKey.isDown){
+
         this.dir = 'left';
-    } else if(this.game.input.keyboard.isDown(Phaser.Keyboard.D)){
-        this.body.velocity.x = this.speed;
+        this.body.velocity.x = -this.speed;
+
+        if(this.canSlide == true && this.LeftKey.timeDown+250 > this.game.time.now){
+            this.slideCooldown  = this.game.time.totalElapsedSeconds() + 3;
+            this.body.velocity.x = -this.speed*3;
+            console.log("cooldown");
+        } else {
+            this.canSlide = false;
+        }
+
+
+    } else if(this.RightKey.isDown){
+
         this.dir = 'right';
+        this.body.velocity.x = this.speed;
+
+        if(this.canSlide == true && (this.RightKey.timeDown+250) > this.game.time.now){
+            this.slideCooldown = this.game.time.totalElapsedSeconds() + 3;
+            this.body.velocity.x = this.speed*3;
+            console.log("cooldown");
+        } else{
+            this.canSlide = false;
+        }
+
     } else {
         this.body.velocity.x = 0;
+
+    }
+
+    if(this.slideCooldown > this.game.time.totalElapsedSeconds() && this.RightKey.isUp && this.dir == 'right' ||
+        this.slideCooldown > this.game.time.totalElapsedSeconds() && this.LeftKey.isUp && this.dir == 'left'){
+        this.canSlide = false;
+    }
+
+
+    if(this.slide == true && this.slideCooldown < this.game.time.totalElapsedSeconds()){
+
+        if((this.RightKey.timeDown+100) > this.game.time.now){
+            if((this.RightKey.timeUp+100) > this.game.time.now){
+                console.log("can slide");
+                this.canSlide = true;
+            }
+        }
+
+        if(this.LeftKey.timeDown+100 > this.game.time.now){
+            if(this.LeftKey.timeUp+100 > this.game.time.now){
+                console.log("can slide");
+                this.canSlide = true;
+            }
+        }
+    }
+    if(this.doubleJump == true && this.jumps < 2 && this.jumpsTimer <= this.game.time.now){
+        if(this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) ||
+            this.game.input.keyboard.isDown(Phaser.Keyboard.W)){
+            this.body.velocity.y = -this.jumpHeight;
+            this.jumps = 2;
+            console.log("2 jumps");
+        }
     }
 
     //player jumping
     if(this.body.onFloor() && this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) ||
         this.body.onFloor() && this.game.input.keyboard.isDown(Phaser.Keyboard.W)){
         this.body.velocity.y = -this.jumpHeight;
+        this.jumps = 1;
+        this.jumpsTimer = this.game.time.now + 500;
+    }
+
+    if(this.body.onFloor()){
+        this.jumps = 0;
     }
 
     //player crouching
@@ -93,6 +148,9 @@ Player.prototype.update = function(){
 
     //update the players gun
     this.playerGun.update(this.x + this.body.width / 2,  this.y + this.body.height / 2);
+
+    this.AbilityBehaviours();
+
 }
 
 //function for changing the players gun
@@ -112,3 +170,42 @@ Player.prototype.ChangeGun = function(gun){
             break;
     }
 }
+
+Player.prototype.ChangeAbility = function(){
+
+    if(this.majorAbillityTag == "Flare"){
+        //sets up one ability sprite and the animation
+        this.majorAbility = this.game.add.sprite(0, 0, 'flare');
+        this.majorAbilityAnim = this.majorAbility.animations.add('flare');
+        this.majorAbility.visible = false;
+    }
+}
+
+
+Player.prototype.AbilityBehaviours = function(){
+
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.E)){
+
+    }
+
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.SHIFT)){
+        //check that the current major ability has an animation
+        if(this.majorAbilityAnim != null){
+
+            this.majorAbility.animations.play('flare', 8, false);
+            this.majorAbility.visible = true;
+
+            if(this.majorAbilityAnim.isFinished == true){
+                this.majorAbility.visible = false;
+            }
+        }
+
+    }
+
+
+
+    if(this.slide === true){
+
+    }
+}
+
