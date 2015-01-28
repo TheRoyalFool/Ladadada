@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="76fd8fd1-e635-46d9-9eb8-b21597449b20" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Game.js" afterPath="$PROJECT_DIR$/src/Game.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Objects/Player.js" afterPath="$PROJECT_DIR$/src/Objects/Player.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/William.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/William.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="PhaserProject.iws" />
@@ -35,10 +37,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Game.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Game.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="96" column="43" selection-start="3280" selection-end="3280" vertical-scroll-proportion="0.0" vertical-offset="2967" max-vertical-offset="3842">
+            <state line="120" column="11" selection-start="3930" selection-end="3930" vertical-scroll-proportion="0.61142856" vertical-offset="1505" max-vertical-offset="4182">
               <folding />
             </state>
           </provider>
@@ -53,10 +55,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Player.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Player.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Objects/Player.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="68" column="16" selection-start="2100" selection-end="2100" vertical-scroll-proportion="0.3417143" vertical-offset="857" max-vertical-offset="3689">
+            <state line="141" column="5" selection-start="4654" selection-end="4654" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4063">
               <folding />
             </state>
           </provider>
@@ -111,12 +113,12 @@
         <option value="$PROJECT_DIR$/src/Objects/Bullet.js" />
         <option value="$PROJECT_DIR$/src/Objects/Enemy.js" />
         <option value="$PROJECT_DIR$/src/Objects/Item.js" />
-        <option value="$PROJECT_DIR$/src/Game.js" />
         <option value="$PROJECT_DIR$/src/Objects/Gun.js" />
         <option value="$PROJECT_DIR$/src/Objects/Abillity.js" />
         <option value="$PROJECT_DIR$/src/Objects/Ability.js" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/src/Objects/Player.js" />
+        <option value="$PROJECT_DIR$/src/Game.js" />
       </list>
     </option>
   </component>
@@ -449,16 +451,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Game.js">
+    <entry file="file://$PROJECT_DIR$/src/Objects/Player.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="96" column="43" selection-start="3280" selection-end="3280" vertical-scroll-proportion="0.0" vertical-offset="2967" max-vertical-offset="3842">
+        <state line="141" column="5" selection-start="4654" selection-end="4654" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4063">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Objects/Player.js">
+    <entry file="file://$PROJECT_DIR$/src/Game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="16" selection-start="2100" selection-end="2100" vertical-scroll-proportion="0.3417143" vertical-offset="857" max-vertical-offset="3689">
+        <state line="120" column="11" selection-start="3930" selection-end="3930" vertical-scroll-proportion="0.61142856" vertical-offset="1505" max-vertical-offset="4182">
           <folding />
         </state>
       </provider>

@@ -20,6 +20,7 @@ window.onload = function(){
 
         //load tile map and tileset for the level
         game.load.tilemap('map', 'assets/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('map2', 'assets/tilemap2.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('tileset', 'assets/tileset.png');
 
         //loads the example for the animation
@@ -31,8 +32,9 @@ window.onload = function(){
     var player;
 
     //variables for each layer on the tilemap
-    var layer;
-    var layer2;
+
+
+    var layers = [];
 
     //map variable
     var map;
@@ -50,16 +52,17 @@ window.onload = function(){
         //general level set up, background color, tile map, layers and collision, world size, gravity
         game.stage.backgroundColor = '#123465';
         game.physics.startSystem(Phaser.Physics.ARCADE);
+
         map = game.add.tilemap('map');
         map.addTilesetImage('tileset');
-        layer = map.createLayer('Tile Layer 1');
-        layer2 = map.createLayer('Tile Layer 2');
-        map.setCollision(4,true,layer);
-        layer.resizeWorld();
+        layers[0] = map.createLayer('Tile Layer 1');
+        layers[1] = map.createLayer('Tile Layer 2');
+        map.setCollision(4,true,layers[0]);
+        layers[0].resizeWorld();
         game.physics.arcade.gravity.y = 600;
 
         //make the second layer invisible
-        layer2.visible = false;
+        layers[1].visible = false;
 
         //set up enemy and item groups
         enemyGroup = game.add.group();
@@ -67,7 +70,7 @@ window.onload = function(){
         itemGroup = game.add.group();
 
         //map array for placing all the objects
-        var mapArray = layer2.getTiles(0,0,game.world.width, game.world.height);
+        var mapArray = layers[1].getTiles(0,0,game.world.width, game.world.height);
 
         //loop through all the tiles in the map
         for(var i = 0; i < mapArray.length; i++){
@@ -104,7 +107,7 @@ window.onload = function(){
     function update(){
 
         //make the player collide with the ground and platforms
-        game.physics.arcade.collide(player, layer);
+        game.physics.arcade.collide(player, layers[0]);
 
         for(var i = 0; i < itemGroup.length; i++){
             currItem = i;
@@ -121,7 +124,7 @@ window.onload = function(){
         if(enemyGroup.length > 0){
 
             //make the enemies collide with the ground
-            game.physics.arcade.collide(enemyGroup, layer);
+            game.physics.arcade.collide(enemyGroup, layers[0]);
 
             //if the player's bullets hit any of the enemies then call bulletHitEnemy
             game.physics.arcade.collide(player.bullets,enemyGroup,bulletHitEnemy);
@@ -215,6 +218,23 @@ window.onload = function(){
         //damage the player and the enemy bullet by 1 and log the players health
         player.damage(1);
         enemyBullet.damage(1);
+    }
+
+    function LoadLevel(level){
+        map = game.add.tilemap('map2');
+
+        layers.forEach(function(currLayer, L, Layers){
+            currLayer.kill();
+        })
+
+        map.addTilesetImage('tileset');
+        layers[0] = map.createLayer('Tile Layer 1');
+        layers[1] = map.createLayer('Tile Layer 2');
+        map.setCollision(4,true,layers[0]);
+        layers[0].resizeWorld();
+
+        //make the second layer invisible
+        layers[1].visible = false;
     }
 
 

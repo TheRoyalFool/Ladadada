@@ -27,13 +27,17 @@ Player = function(game, x, y, img, speed, jumpHeight) {
 
     this.minorAbillityTag = "";
     this.majorAbillityTag = "";
-    this.doubleJump = false;
+
+    //double jump ability variables
+    this.doubleJump = true;
     this.jumps = 0;
     this.jumpsTimer = 0;
 
+    //sliding ability variables
     this.slide = true;
     this.canSlide = false;
     this.slideCooldown = 0;
+
 
     this.majorAbility = game.add.sprite(0, 0, null);
     this.minorAbility = game.add.sprite(0, 0, null);
@@ -44,6 +48,7 @@ Player = function(game, x, y, img, speed, jumpHeight) {
     //set up the players gun
     this.ChangeGun("Hail");
 
+    //variables for movement keys
     this.LeftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.RightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
 }
@@ -53,24 +58,28 @@ Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
 
-    this.game.debug.text(this.canSlide, 10, 20);
-    //this.game.debug.text(this.RightKey.isUp, 10, 40);
 
-    //player movement
+    //player movement and sliding ability
     if(this.LeftKey.isDown){
 
         this.dir = 'left';
         this.body.velocity.x = -this.speed;
 
+        //when the player can slide he will slide for 250 millie seconds
         if(this.canSlide == true && this.LeftKey.timeDown+250 > this.game.time.now){
+
+            //reset the slideCooldown variable
             this.slideCooldown  = this.game.time.totalElapsedSeconds() + 3;
+
+            //make the player move 3x faster whilst hes sliding
             this.body.velocity.x = -this.speed*3;
-            console.log("cooldown");
         } else {
+            //when the player has been holding the key for 250 millie seconds reset the canSlide variable
             this.canSlide = false;
         }
 
 
+      //this all does the same as above for the opposite key
     } else if(this.RightKey.isDown){
 
         this.dir = 'right';
@@ -79,23 +88,34 @@ Player.prototype.update = function(){
         if(this.canSlide == true && (this.RightKey.timeDown+250) > this.game.time.now){
             this.slideCooldown = this.game.time.totalElapsedSeconds() + 3;
             this.body.velocity.x = this.speed*3;
-            console.log("cooldown");
+
         } else{
             this.canSlide = false;
         }
 
     } else {
+
+        //when the player is not pressing any movement key then stop the player
         this.body.velocity.x = 0;
 
     }
 
+    //this keeps the canSlide variable false while the slideCooldown is active
     if(this.slideCooldown > this.game.time.totalElapsedSeconds() && this.RightKey.isUp && this.dir == 'right' ||
         this.slideCooldown > this.game.time.totalElapsedSeconds() && this.LeftKey.isUp && this.dir == 'left'){
         this.canSlide = false;
     }
 
-
+    //whilst the slide abillity variable is active and the slideCooldown is not active
     if(this.slide == true && this.slideCooldown < this.game.time.totalElapsedSeconds()){
+
+        /*
+            These two statements are timed to check 2 separate key events
+            - KeyDown
+            - KeyUp
+            the player has 100 millie seconds to hit the right of left key twice
+            this code paired with the movement code above allows the player to slide.
+        */
 
         if((this.RightKey.timeDown+100) > this.game.time.now){
             if((this.RightKey.timeUp+100) > this.game.time.now){
@@ -103,7 +123,6 @@ Player.prototype.update = function(){
                 this.canSlide = true;
             }
         }
-
         if(this.LeftKey.timeDown+100 > this.game.time.now){
             if(this.LeftKey.timeUp+100 > this.game.time.now){
                 console.log("can slide");
@@ -111,6 +130,8 @@ Player.prototype.update = function(){
             }
         }
     }
+
+
     if(this.doubleJump == true && this.jumps < 2 && this.jumpsTimer <= this.game.time.now){
         if(this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) ||
             this.game.input.keyboard.isDown(Phaser.Keyboard.W)){
@@ -125,6 +146,7 @@ Player.prototype.update = function(){
         this.body.onFloor() && this.game.input.keyboard.isDown(Phaser.Keyboard.W)){
         this.body.velocity.y = -this.jumpHeight;
         this.jumps = 1;
+        //if the jumping the undesirable then change it so the player can only jump a second time whilst his velocity is > 0
         this.jumpsTimer = this.game.time.now + 500;
     }
 
