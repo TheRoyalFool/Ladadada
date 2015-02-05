@@ -86,8 +86,8 @@ window.onload = function(){
 
             //if the tile index is 2 create an enemy at that tiles position and add him to the game
             if(myTile.index == 2){
-                //var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'flying', 250, 1);
-                //enemyGroup.add(enemy);
+                var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'shooter', 250, 1);
+                enemyGroup.add(enemy);
             }
 
             //if the tiles index is 3 then add an item to the game and place it at the tiles position
@@ -114,6 +114,9 @@ window.onload = function(){
 
         }
 
+        if(game.input.keyboard.isDown(Phaser.Keyboard.G)){
+            LoadLevel('this');
+        }
         game.physics.arcade.overlap(itemGroup, player, function(player, item){
 
             player.ChangeGun("Hail");
