@@ -150,9 +150,23 @@ Player.prototype.update = function(){
     this.body.maxVelocity.y = 1000;
 
     //update the players gun
-    this.playerGun.update(this.x + this.body.width / 2,  this.y + this.body.height / 2);
+    this.playerGun.update();
 
     this.AbilityBehaviours();
+
+
+    var deltaX = this.game.input.activePointer.worldX - this.x;
+    var deltaY = this.game.input.activePointer.worldY - this.y;
+    var angle = Math.atan2(deltaX, deltaY) * 180 / Math.PI; // Convert to radians
+
+    this.playerGun.x = this.x;
+    this.playerGun.y = this.y;
+    this.playerGun.pivot.x = -50;
+    this.playerGun.pivot.y = -50;
+
+    this.game.debug.text(angle, 10,20);
+
+    this.playerGun.angle = angle - 360;
 
 }
 
@@ -160,7 +174,7 @@ Player.prototype.update = function(){
 Player.prototype.ChangeGun = function(gun){
     switch(gun){
         case "Hail":
-            this.playerGun = new Gun(this.game, 0.1, 3, 10, 1);
+            this.playerGun = new Gun(this.game, 0.1, 3, 10, 1,0,0,'bull');
             break;
         case "Buckshot":
             this.playerGun = new Gun(this.game, 0.1, 3, 30, 1);
