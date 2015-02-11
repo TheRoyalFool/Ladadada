@@ -18,10 +18,13 @@ window.onload = function(){
         game.load.image('bull', 'assets/bullet.jpg');
         game.load.image('itemimg', 'assets/item.png');
 
+        game.load.image('ladder', 'assets/ladder.png');
+
         //load tile map and tileset for the level
         game.load.tilemap('map', 'assets/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.tilemap('map2', 'assets/tilemap2.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('tileset', 'assets/tileset.png');
+        game.load.image('tileset2', 'assets/tileset2.png');
 
         //loads the example for the animation
         game.load.spritesheet('flare', 'assets/SolarFlare.png', 64, 64, 16);
@@ -38,6 +41,7 @@ window.onload = function(){
 
     //map variable
     var map;
+    var Ladders;
 
     //enemy and item group variables
     var enemyGroup;
@@ -53,8 +57,8 @@ window.onload = function(){
         game.stage.backgroundColor = '#123465';
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        map = game.add.tilemap('map');
-        map.addTilesetImage('tileset');
+        map = game.add.tilemap('map2');
+        map.addTilesetImage('tileset2');
         layers[0] = map.createLayer('Tile Layer 1');
         layers[1] = map.createLayer('Tile Layer 2');
         map.setCollision(4,true,layers[0]);
@@ -68,6 +72,8 @@ window.onload = function(){
         enemyGroup = game.add.group();
 
         itemGroup = game.add.group();
+
+        Ladders = game.add.group();
 
         //map array for placing all the objects
         var mapArray = layers[1].getTiles(0,0,game.world.width, game.world.height);
@@ -95,6 +101,11 @@ window.onload = function(){
             if(myTile.index == 3){
                 var item = new Item(game, myTile.worldX, myTile.worldY, 'itemimg', 'item');
                 itemGroup.add(item);
+            }
+
+            if(myTile.index == 5){
+                var ladder = new Ladder(game, myTile.worldX, myTile.worldY, 'ladder');
+                Ladders.add(ladder);
             }
         }
 
@@ -124,11 +135,19 @@ window.onload = function(){
             itemGroup.remove(item);
         });
 
+        //while the player is not colliding with a ladder set onLadder to false
+        player.onLadder = false;
+
+        game.physics.arcade.overlap(Ladders, player, function(player, ladder){
+           player.onLadder = true;
+        });
+
         //check that there is at least one enemy on the map
         if(enemyGroup.length > 0){
 
             //make the enemies collide with the ground
             game.physics.arcade.collide(enemyGroup, layers[0]);
+            game.physics.arcade.collide(player, layers[0]);
 
             //if the player's bullets hit any of the enemies then call bulletHitEnemy
             game.physics.arcade.collide(player.bullets,enemyGroup,bulletHitEnemy);
@@ -143,7 +162,6 @@ window.onload = function(){
 
             //check for collision between the player and the enemy bullets
             game.physics.arcade.collide(enemyGroup.bullets, player, playerHitByEnemy);
-
 
 
             //cycle through the enemy group

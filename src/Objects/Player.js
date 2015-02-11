@@ -51,6 +51,13 @@ Player = function(game, x, y, img, speed, jumpHeight) {
     //variables for movement keys
     this.LeftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.RightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
+    this.UpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+    this.DownKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+
+    this.onLadder = false;
+
+
+
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -98,6 +105,19 @@ Player.prototype.update = function(){
         //when the player is not pressing any movement key then stop the player
         this.body.velocity.x = 0;
 
+    }
+
+    if(this.onLadder == true){
+        if(this.UpKey.isDown){
+            this.body.velocity.y = -this.speed;
+        }
+        if(this.DownKey.isDown){
+            this.body.velocity.y = this.speed;
+        }
+
+        if(this.body.velocity.y < -this.speed){
+            this.body.velocity.y = -this.speed
+        }
     }
 
     //this keeps the canSlide variable false while the slideCooldown is active
