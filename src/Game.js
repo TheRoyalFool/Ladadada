@@ -82,6 +82,7 @@ window.onload = function(){
                 //create player and add him to the game and give him physics
                 player = new Player(game, myTile.worldX, myTile.worldY, 'playerimg', 300, 290);
                 game.add.existing(player);
+                game.add.existing(player.playerGun);
             }
 
             //if the tile index is 2 create an enemy at that tiles position and add him to the game

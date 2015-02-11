@@ -1,5 +1,5 @@
-Gun = function(game ,fireRate, reloadSpeed, clipSize, Dpb, x, y){
-    Phaser.Sprite.call(this, game, x, y, null);
+Gun = function(game ,fireRate, reloadSpeed, clipSize, Dpb, x, y, img){
+    Phaser.Sprite.call(this, game, x, y, img);
 
     //constants for each gun
     this.fireRate = fireRate;
@@ -21,11 +21,7 @@ Gun = function(game ,fireRate, reloadSpeed, clipSize, Dpb, x, y){
 Gun.prototype = Object.create(Phaser.Sprite.prototype);
 Gun.prototype.constructor = Gun;
 
-Gun.prototype.update = function(x, y){
-
-    //position the gun at the middle of the player
-    this.x = x;
-    this.y = y;
+Gun.prototype.update = function(){
 
     //check for the mouse click, if the player can firing and if the player is reloading
     if (this.game.input.activePointer.isDown && this.lastFired < this.game.time.now && this.reloading == false)
