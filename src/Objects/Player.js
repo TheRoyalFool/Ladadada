@@ -51,6 +51,7 @@ Player = function(game, x, y, img, speed, jumpHeight) {
      *  which was bugging the update function. We decided to use this function to update the
      *  players gun.
     */
+    this.playerGun = new Gun(this.game, 0.1, 3, 10, 1,0,0,'bull');
     this.ChangeGun("Hail");
 
     this.LeftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
@@ -115,7 +116,7 @@ Player.prototype.update = function(){
     }
 
     //handles everything about sliding
-    SlidingUpdate();
+    this.SlidingUpdate();
 
     //This allows the player to jump for a second time whilst in the air
     if(this.doubleJump == true && this.jumps < 2 && this.jumpsTimer <= this.game.time.now){
@@ -149,12 +150,13 @@ Player.prototype.update = function(){
 
     this.body.maxVelocity.y = 1000;
 
-    //update the players gun
     this.playerGun.update();
+    this.playerGun.x = this.x;
+    this.playerGun.y = this.y;
 
     this.AbilityBehaviours();
 
-
+    /*
     var deltaX = this.game.input.activePointer.worldX - this.x;
     var deltaY = this.game.input.activePointer.worldY - this.y;
     var angle = Math.atan2(deltaX, deltaY) * 180 / Math.PI; // Convert to radians
@@ -167,11 +169,13 @@ Player.prototype.update = function(){
     this.game.debug.text(angle, 10,20);
 
     this.playerGun.angle = angle - 360;
-
+*/
 }
 
 //function for changing the players gun
 Player.prototype.ChangeGun = function(gun){
+
+
     switch(gun){
         case "Hail":
             this.playerGun = new Gun(this.game, 0.1, 3, 10, 1,0,0,'bull');
@@ -185,6 +189,7 @@ Player.prototype.ChangeGun = function(gun){
         case "Potshot":
             this.playerGun = new Gun(this.game, 3, 3, 30, 1);
             break;
+
     }
 }
 
@@ -218,9 +223,6 @@ Player.prototype.AbilityBehaviours = function(){
         }
 
     }
-
-
-
     if(this.slide === true){
 
     }
@@ -228,7 +230,7 @@ Player.prototype.AbilityBehaviours = function(){
 
 
 
-function SlidingUpdate(){
+Player.prototype.SlidingUpdate = function(){
     //this keeps the canSlide variable false while the slideCooldown is active
     if(this.slideCooldown > this.game.time.totalElapsedSeconds() && this.RightKey.isUp && this.dir == 'right' ||
         this.slideCooldown > this.game.time.totalElapsedSeconds() && this.LeftKey.isUp && this.dir == 'left'){

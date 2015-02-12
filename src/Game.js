@@ -93,8 +93,29 @@ window.onload = function(){
 
             //if the tile index is 2 create an enemy at that tiles position and add him to the game
             if(myTile.index == 2){
-                var enemy = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'shooter', 250, 1);
-                enemyGroup.add(enemy);
+                var enemiesToAdd = [];
+                var RndEnemy = Math.floor(Math.random() * 4) + 1
+
+                switch (RndEnemy){
+                    case 1: //flying
+                        for(var e = 0; e < 3; e++){
+                            enemiesToAdd[e] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'flying', 250, 1);
+                        }
+                        break;
+                    case 2: //shooter
+                            enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'shooter', 250, 1);
+                        break;
+                    case 3: //melee
+                        enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'melee', 250, 1);
+                        break;
+                    case 4: //exploding
+                        enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'exploding', 250, 1);
+                        break;
+                }
+
+                for(var ea = 0; ea < enemiesToAdd.length; ea++){
+                    enemyGroup.add(enemiesToAdd[ea]);
+                }
             }
 
             //if the tiles index is 3 then add an item to the game and place it at the tiles position
@@ -121,18 +142,20 @@ window.onload = function(){
         //make the player collide with the ground and platforms
         game.physics.arcade.collide(player, layers[0]);
 
-        for(var i = 0; i < itemGroup.length; i++){
-            currItem = i;
-
-        }
+        game.physics.arcade.collide(enemyGroup, enemyGroup);
 
         if(game.input.keyboard.isDown(Phaser.Keyboard.G)){
             LoadLevel('this');
         }
+
         game.physics.arcade.overlap(itemGroup, player, function(player, item){
+
+            player.playerGun.kill();
+            player.playerGun.destroy();
 
             player.ChangeGun("Hail");
             itemGroup.remove(item);
+            game.add.existing(player.playerGun);
         });
 
         //while the player is not colliding with a ladder set onLadder to false
@@ -142,15 +165,18 @@ window.onload = function(){
            player.onLadder = true;
         });
 
-        //check that there is at least one enemy on the map
-        if(enemyGroup.length > 0){
+        if(enemyGroup.length > 0){  //to fix a problem while testing, when there is no enemy on the map
 
-            //make the enemies collide with the ground
             game.physics.arcade.collide(enemyGroup, layers[0]);
             game.physics.arcade.collide(player, layers[0]);
 
             //if the player's bullets hit any of the enemies then call bulletHitEnemy
-            game.physics.arcade.collide(player.bullets,enemyGroup,bulletHitEnemy);
+            game.physics.arcade.collide(player.playerGun.bullets,enemyGroup, function(bullet, enemy){
+
+                //kill the player bullet and the enemy
+                bullet.damage(1);
+                enemy.damage(1);
+            });
 
             //if the player's melee range and an enemy are overlapping
             game.physics.arcade.overlap(enemyGroup, player.meleeRange, function(player, enemy){
@@ -160,24 +186,25 @@ window.onload = function(){
                 }
             });
 
-            //check for collision between the player and the enemy bullets
-            game.physics.arcade.collide(enemyGroup.bullets, player, playerHitByEnemy);
-
-
             //cycle through the enemy group
             for(var e = 0; e < enemyGroup.length; e++) {
 
-                //set up global variable so when can check which enemy is being updated from anywhere
+                //set up global variable so we can check which enemy is being updated from anywhere
                 currEnemy = e;
 
                 //when an enemies health reaches 0 kill it and remove it from the group
                 if(enemyGroup.getAt(e).health <= 0) {
-                    //enemyGroup.getAt(i).kill;
+                    enemyGroup.getAt(e).kill;
                     enemyGroup.remove(enemyGroup.getAt(e));
                     console.log(enemyGroup.length);
                 }
                 //check for collision between the player and the enemy bullets
-                game.physics.arcade.collide(enemyGroup.getAt(e).bullets, player, playerHitByEnemy);
+                game.physics.arcade.collide(enemyGroup.getAt(e).bullets, player, function(player, enemyBullet){
+
+                    //damage the player and the enemy bullet by 1 and log the players health
+                    player.damage(1);
+                    enemyBullet.damage(1);
+                });
 
                 //stops a shooter enemy from moving too far away from the player
                 if(enemyGroup.getAt(e).type == "shooter"){
@@ -225,22 +252,10 @@ window.onload = function(){
         //game.debug.bodyInfo(player, 0, 25);
         //game.debug.bodyInfo(enemyGroup.getAt(0), 0, 175);
 
+        game.debug.text(player.health, 10,10);
+
     }
 
-    //the call back for when the player's bullet hits an enemy
-    function bulletHitEnemy(bullet, enemy){
-
-        //kill the player bullet and the enemy
-        bullet.damage(1);
-        enemy.damage(1);
-    }
-
-    //the call back for when the player is hit by an enemy bullet
-    function playerHitByEnemy(player, enemyBullet) {
-        //damage the player and the enemy bullet by 1 and log the players health
-        player.damage(1);
-        enemyBullet.damage(1);
-    }
 
     function LoadLevel(level){
         map = game.add.tilemap('map2');
