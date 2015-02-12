@@ -18,7 +18,7 @@ Player = function(game, x, y, img, speed, jumpHeight) {
     this.body.setSize(64 ,64);
 
     //sets up sprite for players melee skill
-    this.meleeRange = game.add.sprite(this.body.width/2 - 80, y, null);
+    this.meleeRange = game.add.sprite(0 + (this.body.width/2 - 80), 0, null);
     game.physics.enable(this.meleeRange);
     this.meleeRange.body.gravity = -game.physics.gravity; //so the meleeRange body does not fall out of the world
     this.meleeRange.body.setSize(160,64);
@@ -27,7 +27,6 @@ Player = function(game, x, y, img, speed, jumpHeight) {
     //dont know if this is still going to be used
     this.minorAbillityTag = "";
     this.majorAbillityTag = "";
-
 
     //double jump ability variables
     this.doubleJump = true; //this stores if the player has the double jump ability
@@ -67,7 +66,6 @@ Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
-
     /*
      * Using the players direction call the right slide direction.
      * This allows the player to dash quickly to one side every 3 seconds
@@ -170,6 +168,7 @@ Player.prototype.update = function(){
 
     this.playerGun.angle = angle - 360;
 */
+
 }
 
 //function for changing the players gun

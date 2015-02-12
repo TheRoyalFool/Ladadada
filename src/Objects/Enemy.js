@@ -10,6 +10,7 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight, dps){
     this.dps = dps;
 
     game.physics.enable(this, Phaser.Physics.ARCADE);
+    this.body.collideWorldBounds = true;
 
     //enemy bullet group declaration
     this.bullets = game.add.group();
@@ -127,7 +128,7 @@ Enemy.prototype.followPlayer = function(player) {
     }
 }
 
-Enemy.prototype.SightBehaviour = function(player){
+Enemy.prototype.SightBehaviour = function(playersX){
 
     if(this.type == "flying"){
 
@@ -135,10 +136,10 @@ Enemy.prototype.SightBehaviour = function(player){
     else if(this.type == "shooter"){
 
         //if the player is to the left of the enemy fire left and the same for right
-        if(player.x < this.x) {
+        if(playersX.x < this.x) {
            this.Fire('left');
         }
-        if(player.x > this.x){
+        if(playersX.x > this.x){
            this.Fire('right');
         }
 
@@ -154,17 +155,12 @@ Enemy.prototype.SightBehaviour = function(player){
 
 }
 
-Enemy.prototype.CollideBehaviour = function(player){
-
-    //if the player collides with a melee or flying type enemy then he takes damage
+Enemy.prototype.CollideBehaviour = function(){
     if(this.type == "melee" || this.type == "flying"){
         if(this.canAttack == true){
-            player.damage(this.dps);
             this.lastAttack = this.game.time.totalElapsedSeconds() + 1;
         }
-    //if the player collides with an exploding enemy then he takes damage and kill the enemy
     } else if(this.type == "exploding"){
-            player.damage(this.dps);
             this.kill();
     }
 }

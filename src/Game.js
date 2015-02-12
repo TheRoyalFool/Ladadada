@@ -47,10 +47,6 @@ window.onload = function(){
     var enemyGroup;
     var itemGroup;
 
-    //holds the current enemy being updated
-    var currEnemy;
-    var currItem;
-
     function create(){
 
         //general level set up, background color, tile map, layers and collision, world size, gravity
@@ -88,7 +84,8 @@ window.onload = function(){
                 //create player and add him to the game and give him physics
                 player = new Player(game, myTile.worldX, myTile.worldY, 'playerimg', 300, 290);
                 game.add.existing(player);
-                game.add.existing(player.playerGun);
+                // game.add.existing(player.playerGun);
+                // player.addChild(player.meleeRange);
             }
 
             //if the tile index is 2 create an enemy at that tiles position and add him to the game
@@ -103,7 +100,7 @@ window.onload = function(){
                         }
                         break;
                     case 2: //shooter
-                            enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'shooter', 250, 1);
+                        enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'shooter', 250, 1);
                         break;
                     case 3: //melee
                         enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'melee', 250, 1);
@@ -144,67 +141,43 @@ window.onload = function(){
 
         game.physics.arcade.collide(enemyGroup, enemyGroup);
 
+        //testing for level changes
         if(game.input.keyboard.isDown(Phaser.Keyboard.G)){
             LoadLevel('this');
         }
 
-        game.physics.arcade.overlap(itemGroup, player, function(player, item){
+        game.physics.arcade.overlap(itemGroup, player, PickUpItem);
 
-            player.playerGun.kill();
-            player.playerGun.destroy();
-
-            player.ChangeGun("Hail");
-            itemGroup.remove(item);
-            game.add.existing(player.playerGun);
-        });
-
-        //while the player is not colliding with a ladder set onLadder to false
+        //resets the player on ladder function so if hes not on one its false
         player.onLadder = false;
 
         game.physics.arcade.overlap(Ladders, player, function(player, ladder){
-           player.onLadder = true;
+            player.onLadder = true;
         });
 
         if(enemyGroup.length > 0){  //to fix a problem while testing, when there is no enemy on the map
 
             game.physics.arcade.collide(enemyGroup, layers[0]);
-            game.physics.arcade.collide(player, layers[0]);
 
-            //if the player's bullets hit any of the enemies then call bulletHitEnemy
             game.physics.arcade.collide(player.playerGun.bullets,enemyGroup, function(bullet, enemy){
-
-                //kill the player bullet and the enemy
                 bullet.damage(1);
                 enemy.damage(1);
             });
 
-            //if the player's melee range and an enemy are overlapping
-            game.physics.arcade.overlap(enemyGroup, player.meleeRange, function(player, enemy){
-                //if the M button is pressed then the enemy takes damage
-                if(game.input.keyboard.isDown(Phaser.Keyboard.M)){
-                    enemy.damage(1);
-                }
-            });
+            game.physics.arcade.overlap(enemyGroup, player.meleeRange, PlayerMeleeEnemy);
 
             //cycle through the enemy group
             for(var e = 0; e < enemyGroup.length; e++) {
 
-                //set up global variable so we can check which enemy is being updated from anywhere
-                currEnemy = e;
-
                 //when an enemies health reaches 0 kill it and remove it from the group
                 if(enemyGroup.getAt(e).health <= 0) {
                     enemyGroup.getAt(e).kill;
+                    enemyGroup.getAt(e).destroy();
                     enemyGroup.remove(enemyGroup.getAt(e));
-                    console.log(enemyGroup.length);
                 }
-                //check for collision between the player and the enemy bullets
-                game.physics.arcade.collide(enemyGroup.getAt(e).bullets, player, function(player, enemyBullet){
 
-                    //damage the player and the enemy bullet by 1 and log the players health
-                    player.damage(1);
-                    enemyBullet.damage(1);
-                });
+                //check for collision between the player and the enemy bullets
+                game.physics.arcade.collide(enemyGroup.getAt(e).bullets, player,EnemyBulletHitPlayer);
 
                 //stops a shooter enemy from moving too far away from the player
                 if(enemyGroup.getAt(e).type == "shooter"){
@@ -214,24 +187,19 @@ window.onload = function(){
 
                 enemyGroup.getAt(e).seesPlayer = false;
 
-                //check for collision between Enemy's sight and player
                 game.physics.arcade.overlap(enemyGroup.getAt(e).sight, player, function(player, enemy){
-
                     enemyGroup.getAt(e).seesPlayer = true;
-
                 });
 
                 game.physics.arcade.overlap(enemyGroup, player, function (player, enemy){
-                    enemyGroup.getAt(e).CollideBehaviour(player);
-                    console.log(player.health);
+                    enemyGroup.getAt(e).CollideBehaviour();
+                    player.damage(enemyGroup.getAt(e).dps);
                 });
 
-                //if the enemy is following the player then send the players position to the enemy
                 if(enemyGroup.getAt(e).seesPlayer == true){
-                    enemyGroup.getAt(e).SightBehaviour(player);
+                    enemyGroup.getAt(e).SightBehaviour(player.x);
                 }
 
-                //if the enemy is following the player then send the players position to the enemy
                 if(enemyGroup.getAt(e).followingPlayer == true){
                     enemyGroup.getAt(e).followPlayer(player);
                 }
@@ -244,9 +212,10 @@ window.onload = function(){
     //general debugging and in house desk testing
     function render(){
 
-        if(enemyGroup.length > 0){
-            game.debug.body(enemyGroup.getAt(0).sight, 'rgba(255,0,255,1)', false);
-        }
+        enemyGroup.forEachAlive(function(enemy){
+           game.debug.body(enemy.sight, 'rgba(255,0,255,1)', false);
+        });
+
         game.debug.body(player.meleeRange, 'rgba(255,255,0,1)', false);
 
         //game.debug.bodyInfo(player, 0, 25);
@@ -266,12 +235,36 @@ window.onload = function(){
 
         map.addTilesetImage('tileset');
         layers[0] = map.createLayer('Tile Layer 1');
-        layers[1] = map.createLayer('Tile Layer 2');
+        layers[1] = map.createLayer('Tile Layer 2');d
         map.setCollision(4,true,layers[0]);
         layers[0].resizeWorld();
 
         //make the second layer invisible
         layers[1].visible = false;
+    }
+
+    function PickUpItem(player, item){
+
+        player.playerGun.kill();
+        player.playerGun.destroy();
+
+        player.ChangeGun("Hail");
+        itemGroup.remove(item);
+        game.add.existing(player.playerGun);
+    }
+
+    function PlayerMeleeEnemy(player, enemy){
+        if(game.input.keyboard.isDown(Phaser.Keyboard.M)){
+            enemy.damage(1);
+        }
+    }
+
+    function EnemyBulletHitPlayer(player, enemyBullet){
+
+        //damage the player and the enemy bullet by 1 and log the players health
+        player.damage(1);
+        enemyBullet.damage(1);
+
     }
 
 
