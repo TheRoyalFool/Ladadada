@@ -10,12 +10,23 @@ Gun = function(game ,fireRate, reloadSpeed, clipSize, Dpb, x, y, img){
 
     //creates a bullet group for the player and a variable for timing
     this.bullets = game.add.group();
+    for(var i = 0; i < this.clipSize; i++){
+        //create a new bullet and add it to the bullets group
+        this.bullet = new Bullet(this.game, this.x, this.y, 'bull', 300);
+        this.bullets.add(this.bullet);
+
+        this.bullet.kill();
+    }
+
     this.lastFired = 0;
 
     //update variables for gun firing and reloading
     this.reloadTimer = 0;
     this.currClip = this.clipSize;
     this.reloading = false;
+
+    this.cursors = this.game.input.keyboard.createCursorKeys();
+
 }
 
 Gun.prototype = Object.create(Phaser.Sprite.prototype);
@@ -23,28 +34,48 @@ Gun.prototype.constructor = Gun;
 
 Gun.prototype.update = function(){
 
-    //check for the mouse click, if the player can firing and if the player is reloading
-    if (this.game.input.activePointer.isDown && this.lastFired < this.game.time.now && this.reloading == false)
-    {
-        //allows the enemy to fire once every 10 seconds
-        if(this.lastFired < this.game.time.totalElapsedSeconds() && this.currClip > 0) {
+    if(this.cursors.left.isDown || this.cursors.up.isDown || this.cursors.right.isDown || this.cursors.down.isDown){
+        //check for the mouse click, if the player can firing and if the player is reloading
+        if (this.lastFired < this.game.time.now && this.reloading == false)
+        {
+            //allows the enemy to fire once every 10 seconds
+            if(this.lastFired < this.game.time.totalElapsedSeconds() && this.currClip > 0) {
 
-            //create a new bullet and add it to the bullets group
-            this.bullet = new Bullet(this.game, this.x, this.y, 'bull', 300);
-            this.bullets.add(this.bullet);
+                var bullet = this.bullets.getFirstDead();
 
-            //take one bullet away from the current clip
-            this.currClip -= 1;
+                if(bullet != null){
 
-            //reset last fired
-            this.lastFired = this.game.time.totalElapsedSeconds() + this.fireRate;
+                    var dir;
 
-            //if the player tries to reload and the current clips is at 0 then reload
-        } else if(this.currClip == 0){
-            this.Reload();
+                    bullet.revive();
+                    bullet.reset(this.x,this.y);
+
+                    if(this.cursors.left.isDown){
+                        dir = 'left';
+                    }
+                    else if(this.cursors.up.isDown){
+                        dir = 'up';
+                    }
+                    else if(this.cursors.right.isDown){
+                        dir = 'right';
+                    }
+                    else if(this.cursors.down.isDown){
+                        dir = 'down';
+                    }
+                    bullet.PlayerFire(dir);
+
+                    //take one bullet away from the current clip
+                    this.currClip -= 1;
+
+                    //reset last fired
+                    this.lastFired = this.game.time.totalElapsedSeconds() + this.fireRate;
+                }
+
+            } else if(this.currClip == 0){
+                this.Reload();
+            }
         }
     }
-
     //call reload when R is pressed
     if(this.game.input.keyboard.isDown(Phaser.Keyboard.R)){
         this.Reload();

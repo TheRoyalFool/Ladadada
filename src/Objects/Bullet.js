@@ -1,4 +1,4 @@
-Bullet = function(game, x, y, img, speed, dir, dps){
+Bullet = function(game, x, y, img, speed, dir){
     Phaser.Sprite.call(this, game, x, y, img);
 
 
@@ -7,7 +7,6 @@ Bullet = function(game, x, y, img, speed, dir, dps){
     this.img = img;
     this.speed = speed;
     this.dir = dir;
-    this.dps = dps;
     this.anchor.x = 0.5;
     this.anchor.y = 0.5;
 
@@ -40,6 +39,24 @@ Bullet.prototype.update = function(){
 
 }
 
-Bullet.prototype.PlayerFire = function(){
-    this.game.physics.arcade.moveToPointer(this, 300);
+Bullet.prototype.PlayerFire = function(dir){
+    //this.game.physics.arcade.moveToPointer(this, 300);
+
+
+    switch (dir){
+        case 'left':
+            this.body.velocity.x = -this.speed;
+            break;
+        case 'up':
+            this.body.velocity.y = -this.speed;
+            break;
+        case 'right':
+            this.body.velocity.x = this.speed;
+            break;
+        case 'down':
+            this.body.velocity.y = this.speed;
+            break;
+    }
+
+
 }

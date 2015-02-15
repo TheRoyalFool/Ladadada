@@ -149,8 +149,8 @@ Player.prototype.update = function(){
     this.body.maxVelocity.y = 1000;
 
     this.playerGun.update();
-    this.playerGun.x = this.x;
-    this.playerGun.y = this.y;
+    this.playerGun.x = this.x+this.body.width/2;
+    this.playerGun.y = this.y+this.body.height/2;
 
     this.AbilityBehaviours();
 

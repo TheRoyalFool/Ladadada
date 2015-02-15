@@ -64,68 +64,7 @@ window.onload = function(){
         //make the second layer invisible
         layers[1].visible = false;
 
-        //set up enemy and item groups
-        enemyGroup = game.add.group();
-
-        itemGroup = game.add.group();
-
-        Ladders = game.add.group();
-
-        //map array for placing all the objects
-        var mapArray = layers[1].getTiles(0,0,game.world.width, game.world.height);
-
-        //loop through all the tiles in the map
-        for(var i = 0; i < mapArray.length; i++){
-            //create a variable to test against the tiles
-            var myTile = mapArray[i];
-
-            //if the tile index is equal to one
-            if(myTile.index == 1){
-                //create player and add him to the game and give him physics
-                player = new Player(game, myTile.worldX, myTile.worldY, 'playerimg', 300, 290);
-                game.add.existing(player);
-                // game.add.existing(player.playerGun);
-                // player.addChild(player.meleeRange);
-            }
-
-            //if the tile index is 2 create an enemy at that tiles position and add him to the game
-            if(myTile.index == 2){
-                var enemiesToAdd = [];
-                var RndEnemy = Math.floor(Math.random() * 4) + 1
-
-                switch (RndEnemy){
-                    case 1: //flying
-                        for(var e = 0; e < 3; e++){
-                            enemiesToAdd[e] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'flying', 250, 1);
-                        }
-                        break;
-                    case 2: //shooter
-                        enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'shooter', 250, 1);
-                        break;
-                    case 3: //melee
-                        enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'melee', 250, 1);
-                        break;
-                    case 4: //exploding
-                        enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'exploding', 250, 1);
-                        break;
-                }
-
-                for(var ea = 0; ea < enemiesToAdd.length; ea++){
-                    enemyGroup.add(enemiesToAdd[ea]);
-                }
-            }
-
-            //if the tiles index is 3 then add an item to the game and place it at the tiles position
-            if(myTile.index == 3){
-                var item = new Item(game, myTile.worldX, myTile.worldY, 'itemimg', 'item');
-                itemGroup.add(item);
-            }
-
-            if(myTile.index == 5){
-                var ladder = new Ladder(game, myTile.worldX, myTile.worldY, 'ladder');
-                Ladders.add(ladder);
-            }
-        }
+        LoadLevel('map2', 'tileset2');
 
         //make the camera follow the player
         game.camera.follow(player);
@@ -139,11 +78,15 @@ window.onload = function(){
         //make the player collide with the ground and platforms
         game.physics.arcade.collide(player, layers[0]);
 
+        game.physics.arcade.collide(player.playerGun.bullets, layers[0], function(playerBullet, layer){
+            playerBullet.kill();
+        });
+
         game.physics.arcade.collide(enemyGroup, enemyGroup);
 
         //testing for level changes
         if(game.input.keyboard.isDown(Phaser.Keyboard.G)){
-            LoadLevel('this');
+            LoadLevel('map2', 'tileset2');
         }
 
         game.physics.arcade.overlap(itemGroup, player, PickUpItem);
@@ -162,6 +105,7 @@ window.onload = function(){
             game.physics.arcade.collide(player.playerGun.bullets,enemyGroup, function(bullet, enemy){
                 bullet.damage(1);
                 enemy.damage(1);
+                console.log(enemy);
             });
 
             game.physics.arcade.overlap(enemyGroup, player.meleeRange, PlayerMeleeEnemy);
@@ -192,8 +136,7 @@ window.onload = function(){
                 });
 
                 game.physics.arcade.overlap(enemyGroup, player, function (player, enemy){
-                    enemyGroup.getAt(e).CollideBehaviour();
-                    player.damage(enemyGroup.getAt(e).dps);
+                    enemy.CollideBehaviour(player);
                 });
 
                 if(enemyGroup.getAt(e).seesPlayer == true){
@@ -206,7 +149,6 @@ window.onload = function(){
 
             }
         }
-
     }
 
     //general debugging and in house desk testing
@@ -226,21 +168,78 @@ window.onload = function(){
     }
 
 
-    function LoadLevel(level){
-        map = game.add.tilemap('map2');
+    function LoadLevel(level, tileset){
 
-        layers.forEach(function(currLayer, L, Layers){
-            currLayer.kill();
-        })
+        game.world.removeAll();
 
-        map.addTilesetImage('tileset');
+        enemyGroup = game.add.group();
+        itemGroup = game.add.group();
+        Ladders = game.add.group();
+
+        map = game.add.tilemap(level);
+
+        map.addTilesetImage(tileset);
         layers[0] = map.createLayer('Tile Layer 1');
-        layers[1] = map.createLayer('Tile Layer 2');d
+        layers[1] = map.createLayer('Tile Layer 2');
         map.setCollision(4,true,layers[0]);
         layers[0].resizeWorld();
 
         //make the second layer invisible
         layers[1].visible = false;
+
+        //map array for placing all the objects
+        var mapArray = layers[1].getTiles(0,0,game.world.width, game.world.height);
+
+        //loop through all the tiles in the map
+        for(var i = 0; i < mapArray.length; i++){
+            //create a variable to test against the tiles
+            var myTile = mapArray[i];
+
+            //if the tile index is equal to one
+            if(myTile.index == 1){
+                //create player and add him to the game and give him physics
+                player = new Player(game, myTile.worldX, myTile.worldY, 'playerimg', 300, 290);
+                game.add.existing(player);
+            }
+
+            //if the tile index is 2 create an enemy at that tiles position and add him to the game
+            if(myTile.index == 2){
+                var enemiesToAdd = [];
+                var RndEnemy = Math.floor(Math.random() * 4) + 1
+
+                switch (RndEnemy){
+                    case 1: //flying
+
+                        enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'flying', 250, 1, 3);
+
+                        break;
+                    case 2: //shooter
+                        enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'shooter', 250, 1, 5);
+                        break;
+                    case 3: //melee
+                        enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'melee', 250, 1, 4);
+                        break;
+                    case 4: //exploding
+                        enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'exploding', 250, 6);
+                        break;
+                }
+
+
+                    enemyGroup.add(enemiesToAdd[0]);
+
+            }
+
+            //if the tiles index is 3 then add an item to the game and place it at the tiles position
+            if(myTile.index == 3){
+                var item = new Item(game, myTile.worldX, myTile.worldY, 'itemimg', 'item');
+                itemGroup.add(item);
+            }
+
+            if(myTile.index == 5){
+                var ladder = new Ladder(game, myTile.worldX, myTile.worldY, 'ladder');
+                Ladders.add(ladder);
+            }
+        }
     }
 
     function PickUpItem(player, item){
@@ -250,7 +249,6 @@ window.onload = function(){
 
         player.ChangeGun("Hail");
         itemGroup.remove(item);
-        game.add.existing(player.playerGun);
     }
 
     function PlayerMeleeEnemy(player, enemy){

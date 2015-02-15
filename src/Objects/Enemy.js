@@ -1,4 +1,4 @@
-Enemy = function(game, x, y, img, speed, type, jumpHeight, dps){
+Enemy = function(game, x, y, img, speed, type, jumpHeight, dps, health){
     Phaser.Sprite.call(this, game, x, y, img);
 
     this.enemyImage = img;
@@ -8,6 +8,7 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight, dps){
     this.type = type;
     this.jumpHeight = jumpHeight;
     this.dps = dps;
+    this.health = health;
 
     game.physics.enable(this, Phaser.Physics.ARCADE);
     this.body.collideWorldBounds = true;
@@ -63,12 +64,17 @@ Enemy.prototype.update = function(){
         this.body.velocity.x = 0;
     }
 
-    //allows the enemy to fire once every x seconds
-    if(this.lastAttack < this.game.time.totalElapsedSeconds()) {
+    /*
+     //allows the enemy to fire once every x seconds
+     if(this.lastAttack < this.game.time.totalElapsedSeconds()) {
+     this.canAttack = true;
+     this.lastAttack = this.game.time.totalElapsedSeconds() + 1;
+     } else {
+     this.canAttack = false;
+     }
+     */
+    if(this.canAttack == false && this.lastAttack < this.game.time.totalElapsedSeconds()){
         this.canAttack = true;
-        this.lastAttack = this.game.time.totalElapsedSeconds() + 1;
-    } else {
-        this.canAttack = false;
     }
 }
 
@@ -77,11 +83,13 @@ Enemy.prototype.Fire = function(dir){
     //allows the enemy to fire once every x seconds
     if(this.canAttack == true) {
 
+        console.log("Shoot!");
         //use the dir variable to fire the bullet in the right direction
         this.bullet = new Bullet(this.game, this.x + this.body.width / 2, this.y + this.body.height / 2, 'bull', 300, dir, this.dps);
         this.bullets.add(this.bullet);
 
         //reset last fired
+        this.canAttack = false;
         this.lastAttack = this.game.time.totalElapsedSeconds() + 1;
     }
 
@@ -130,17 +138,18 @@ Enemy.prototype.followPlayer = function(player) {
 
 Enemy.prototype.SightBehaviour = function(playersX){
 
+    console.log(this.type);
     if(this.type == "flying"){
 
     }
     else if(this.type == "shooter"){
 
         //if the player is to the left of the enemy fire left and the same for right
-        if(playersX.x < this.x) {
-           this.Fire('left');
+        if(playersX < this.x) {
+            this.Fire('left');
         }
-        if(playersX.x > this.x){
-           this.Fire('right');
+        if(playersX > this.x){
+            this.Fire('right');
         }
 
     } else if(this.type == "melee"){
@@ -155,12 +164,15 @@ Enemy.prototype.SightBehaviour = function(playersX){
 
 }
 
-Enemy.prototype.CollideBehaviour = function(){
+Enemy.prototype.CollideBehaviour = function(player){
     if(this.type == "melee" || this.type == "flying"){
         if(this.canAttack == true){
+            player.damage(this.dps);
+            this.canAttack = false;
             this.lastAttack = this.game.time.totalElapsedSeconds() + 1;
         }
     } else if(this.type == "exploding"){
-            this.kill();
+        this.kill();
+        player.damage(this.dps);
     }
 }

@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="76fd8fd1-e635-46d9-9eb8-b21597449b20" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Objects/Bullet.js" afterPath="$PROJECT_DIR$/src/Objects/Bullet.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Objects/Enemy.js" afterPath="$PROJECT_DIR$/src/Objects/Enemy.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Game.js" afterPath="$PROJECT_DIR$/src/Game.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Objects/Gun.js" afterPath="$PROJECT_DIR$/src/Objects/Gun.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Objects/Player.js" afterPath="$PROJECT_DIR$/src/Objects/Player.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/tilemap2.json" afterPath="$PROJECT_DIR$/assets/tilemap2.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="PhaserProject.iws" />
@@ -37,10 +40,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Game.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Game.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="252" column="31" selection-start="8815" selection-end="8815" vertical-scroll-proportion="0.52" vertical-offset="3842" max-vertical-offset="4692">
+            <state line="83" column="0" selection-start="2565" selection-end="2565" vertical-scroll-proportion="0.0" vertical-offset="959" max-vertical-offset="4658">
               <folding />
             </state>
           </provider>
@@ -64,10 +67,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Player.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Player.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Objects/Player.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="31" selection-start="1141" selection-end="1141" vertical-scroll-proportion="0.0" vertical-offset="3426" max-vertical-offset="4607">
+            <state line="133" column="51" selection-start="4959" selection-end="4959" vertical-scroll-proportion="0.18628572" vertical-offset="2098" max-vertical-offset="4607">
               <folding />
             </state>
           </provider>
@@ -76,7 +79,7 @@
       <file leaf-file-name="Enemy.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Objects/Enemy.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="145" column="36" selection-start="4599" selection-end="4599" vertical-scroll-proportion="0.0" vertical-offset="1386" max-vertical-offset="2924">
+            <state line="61" column="63" selection-start="1883" selection-end="1883" vertical-scroll-proportion="0.0" vertical-offset="1581" max-vertical-offset="3128">
               <folding />
             </state>
           </provider>
@@ -85,7 +88,7 @@
       <file leaf-file-name="Gun.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Objects/Gun.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="19" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="1224">
+            <state line="8" column="19" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0" vertical-offset="145" max-vertical-offset="1751">
               <folding />
             </state>
           </provider>
@@ -94,7 +97,7 @@
       <file leaf-file-name="Bullet.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Objects/Bullet.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="5" selection-start="570" selection-end="570" vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="867">
+            <state line="55" column="20" selection-start="1313" selection-end="1313" vertical-scroll-proportion="0.0" vertical-offset="281" max-vertical-offset="1156">
               <folding />
             </state>
           </provider>
@@ -119,16 +122,16 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/src/example.js" />
-        <option value="$PROJECT_DIR$/src/Objects/Bullet.js" />
         <option value="$PROJECT_DIR$/src/Objects/Item.js" />
-        <option value="$PROJECT_DIR$/src/Objects/Gun.js" />
         <option value="$PROJECT_DIR$/src/Objects/Abillity.js" />
         <option value="$PROJECT_DIR$/src/Objects/Ability.js" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/src/Objects/Ladder.js" />
-        <option value="$PROJECT_DIR$/src/Objects/Player.js" />
         <option value="$PROJECT_DIR$/src/Objects/Enemy.js" />
         <option value="$PROJECT_DIR$/src/Game.js" />
+        <option value="$PROJECT_DIR$/src/Objects/Bullet.js" />
+        <option value="$PROJECT_DIR$/src/Objects/Gun.js" />
+        <option value="$PROJECT_DIR$/src/Objects/Player.js" />
       </list>
     </option>
   </component>
@@ -253,18 +256,10 @@
     <property name="options.lastSelected" value="vcs.Git" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="FullScreen" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
-      <option name="VMOptions" />
-      <option name="arguments" />
-      <option name="filePath" />
-      <option name="scope" value="ALL" />
-      <option name="testName" />
-      <method />
-    </configuration>
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -275,8 +270,12 @@
       <option name="showConsoleOnStdOut" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
-      <envs />
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
       <method />
     </configuration>
     <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
@@ -284,6 +283,10 @@
       <setting name="settingsFile" value="" />
       <setting name="serverType" value="INTERNAL" />
       <setting name="preferredDebugBrowser" value="CHROME" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
@@ -308,7 +311,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32913387" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -344,9 +347,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.11544544" sideWeight="0.672586" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -426,23 +429,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Objects/Bullet.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="5" selection-start="570" selection-end="570" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="867">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Objects/Item.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="12" column="35" selection-start="364" selection-end="364" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Objects/Gun.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="19" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="1224">
           <folding />
         </state>
       </provider>
@@ -454,23 +443,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Objects/Player.js">
+    <entry file="file://$PROJECT_DIR$/src/Game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="31" selection-start="1141" selection-end="1141" vertical-scroll-proportion="0.0" vertical-offset="2550" max-vertical-offset="4607">
+        <state line="83" column="0" selection-start="2565" selection-end="2565" vertical-scroll-proportion="0.0" vertical-offset="959" max-vertical-offset="4658">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Objects/Bullet.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="55" column="20" selection-start="1313" selection-end="1313" vertical-scroll-proportion="0.0" vertical-offset="281" max-vertical-offset="1156">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Objects/Gun.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="19" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0" vertical-offset="145" max-vertical-offset="1751">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Objects/Enemy.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="145" column="36" selection-start="4599" selection-end="4599" vertical-scroll-proportion="0.0" vertical-offset="1386" max-vertical-offset="2924">
+        <state line="61" column="63" selection-start="1883" selection-end="1883" vertical-scroll-proportion="0.0" vertical-offset="1581" max-vertical-offset="3128">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Game.js">
+    <entry file="file://$PROJECT_DIR$/src/Objects/Player.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="252" column="31" selection-start="8815" selection-end="8815" vertical-scroll-proportion="0.52" vertical-offset="3842" max-vertical-offset="4692">
+        <state line="133" column="51" selection-start="4959" selection-end="4959" vertical-scroll-proportion="0.18628572" vertical-offset="2098" max-vertical-offset="4607">
           <folding />
         </state>
       </provider>
