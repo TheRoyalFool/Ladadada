@@ -18,10 +18,6 @@ Bullet = function(game, x, y, img, speed, dir){
 
     this.outOfBoundsKill = true;
     this.checkWorldBounds = true;
-
-    if(this.dir == null){
-        this.PlayerFire();
-    }
 }
 
 

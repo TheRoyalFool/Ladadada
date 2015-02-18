@@ -17,16 +17,15 @@ Player = function(game, x, y, img, speed, jumpHeight) {
     this.body.collideWorldBounds = true;
     this.body.setSize(64 ,64);
 
+    this.anchor.setTo(.5,.5);
+
     //sets up sprite for players melee skill
-    this.meleeRange = game.add.sprite(0 + (this.body.width/2 - 80), 0, null);
+    this.meleeRange = game.add.sprite(0, 0, null);
+    this.meleeRange.anchor.setTo(.5,.5);
     game.physics.enable(this.meleeRange);
     this.meleeRange.body.gravity = -game.physics.gravity; //so the meleeRange body does not fall out of the world
     this.meleeRange.body.setSize(160,64);
     this.addChild(this.meleeRange); //adds melee range to the player DisplayContainer
-
-    //dont know if this is still going to be used
-    this.minorAbillityTag = "";
-    this.majorAbillityTag = "";
 
     //double jump ability variables
     this.doubleJump = true; //this stores if the player has the double jump ability
@@ -38,6 +37,10 @@ Player = function(game, x, y, img, speed, jumpHeight) {
     this.canSlide = false;
     this.slideCooldown = 0;
 
+    //dont know if this is still going to be used
+    this.minorAbillityTag = "";
+    this.majorAbillityTag = "";
+
     //dont know about this either, still to be completed
     this.majorAbility = game.add.sprite(0, 0, null);
     this.minorAbility = game.add.sprite(0, 0, null);
@@ -45,13 +48,16 @@ Player = function(game, x, y, img, speed, jumpHeight) {
     this.addChild(this.minorAbility);
     //till here
 
+    this.body.maxVelocity.y = 800;
+
     /*
      *  When using a variable to store the current player gun it was constantly updating it
      *  which was bugging the update function. We decided to use this function to update the
      *  players gun.
     */
     this.playerGun = new Gun(this.game, 0.1, 3, 10, 1,0,0,'bull');
-    this.ChangeGun("Hail");
+    this.ChangeGun("Buckshot");
+
 
     this.LeftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.RightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
@@ -76,9 +82,12 @@ Player.prototype.update = function(){
 
         this.dir = 'left';
         this.body.velocity.x = -this.speed;
+        this.scale.x = -1;
+        this.scale.y = 1;
         if(this.canSlide == true && this.LeftKey.timeDown+250 > this.game.time.now){
             this.slideCooldown  = this.game.time.totalElapsedSeconds() + 3;
             this.body.velocity.x = -this.speed*3;
+
         } else {
             this.canSlide = false;
         }
@@ -87,9 +96,12 @@ Player.prototype.update = function(){
 
         this.dir = 'right';
         this.body.velocity.x = this.speed;
+        this.scale.x = 1;
+        this.scale.y = 1;
         if(this.canSlide == true && (this.RightKey.timeDown+250) > this.game.time.now){
             this.slideCooldown = this.game.time.totalElapsedSeconds() + 3;
             this.body.velocity.x = this.speed*3;
+
         } else{
             this.canSlide = false;
         }
@@ -139,18 +151,16 @@ Player.prototype.update = function(){
     }
 
     if(this.game.input.keyboard.isDown(Phaser.Keyboard.S)){
-        this.body.setSize(64 ,32 , 0, 32);
+        this.body.setSize(64 ,32, 0, 32);
         this.loadTexture('playercrouched');
     } else if(this.game.input.keyboard.justReleased(Phaser.Keyboard.S)){
         this.body.setSize(64 ,64, 0, 0);
         this.loadTexture(this.playerImg);
     }
 
-    this.body.maxVelocity.y = 1000;
-
     this.playerGun.update();
-    this.playerGun.x = this.x+this.body.width/2;
-    this.playerGun.y = this.y+this.body.height/2;
+    this.playerGun.x = this.x;
+    this.playerGun.y = this.y;
 
     this.AbilityBehaviours();
 
@@ -177,19 +187,19 @@ Player.prototype.ChangeGun = function(gun){
 
     switch(gun){
         case "Hail":
-            this.playerGun = new Gun(this.game, 0.1, 3, 10, 1,0,0,'bull');
+            this.playerGun = new Gun(this.game, 0.1, 3, 10, 1,0,0,'bull', 'Hail');
             break;
         case "Buckshot":
-            this.playerGun = new Gun(this.game, 0.1, 3, 30, 1);
+            this.playerGun = new Gun(this.game, 1.5, 3, 5, 3,0,0,'bull','Buckshot');
             break;
         case "Bullseye":
-            this.playerGun = new Gun(this.game, 0.1, 3, 30, 1);
+            this.playerGun = new Gun(this.game, 3, 2, 5, 5,0,0,'bull','Bullseye');
             break;
         case "Potshot":
-            this.playerGun = new Gun(this.game, 3, 3, 30, 1);
+            this.playerGun = new Gun(this.game, 0.5, 2, 12, 1,0,0,'bull','Potshot');
             break;
-
     }
+    this.playerGun.anchor.setTo(.5,.5);
 }
 
 Player.prototype.ChangeAbility = function(){

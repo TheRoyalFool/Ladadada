@@ -135,7 +135,7 @@ window.onload = function(){
                     enemyGroup.getAt(e).seesPlayer = true;
                 });
 
-                game.physics.arcade.overlap(enemyGroup, player, function (player, enemy){
+                game.physics.arcade.collide(enemyGroup, player, function (player, enemy){
                     enemy.CollideBehaviour(player);
                 });
 
