@@ -1,4 +1,4 @@
-Gun = function(game ,fireRate, reloadSpeed, clipSize, Dpb, x, y, img){
+Gun = function(game ,fireRate, reloadSpeed, clipSize, Dpb, x, y, img, type){
     Phaser.Sprite.call(this, game, x, y, img);
 
     //constants for each gun
@@ -7,6 +7,7 @@ Gun = function(game ,fireRate, reloadSpeed, clipSize, Dpb, x, y, img){
     this.clipSize = clipSize;
     //damage per bullet
     this.Dpb = Dpb;
+    this.type = type;
 
     //creates a bullet group for the player and a variable for timing
     this.bullets = game.add.group();
@@ -34,6 +35,7 @@ Gun.prototype.constructor = Gun;
 
 Gun.prototype.update = function(){
 
+
     if(this.cursors.left.isDown || this.cursors.up.isDown || this.cursors.right.isDown || this.cursors.down.isDown){
         //check for the mouse click, if the player can firing and if the player is reloading
         if (this.lastFired < this.game.time.now && this.reloading == false)
@@ -41,36 +43,74 @@ Gun.prototype.update = function(){
             //allows the enemy to fire once every 10 seconds
             if(this.lastFired < this.game.time.totalElapsedSeconds() && this.currClip > 0) {
 
-                var bullet = this.bullets.getFirstDead();
+                var dir;
+                var bx = this.x;
+                var by = this.y;
 
-                if(bullet != null){
-
-                    var dir;
-
-                    bullet.revive();
-                    bullet.reset(this.x,this.y);
-
-                    if(this.cursors.left.isDown){
-                        dir = 'left';
-                    }
-                    else if(this.cursors.up.isDown){
-                        dir = 'up';
-                    }
-                    else if(this.cursors.right.isDown){
-                        dir = 'right';
-                    }
-                    else if(this.cursors.down.isDown){
-                        dir = 'down';
-                    }
-                    bullet.PlayerFire(dir);
-
-                    //take one bullet away from the current clip
-                    this.currClip -= 1;
-
-                    //reset last fired
-                    this.lastFired = this.game.time.totalElapsedSeconds() + this.fireRate;
+                if(this.cursors.left.isDown){
+                    dir = 'left';
+                    bx -= 50;
+                    by -= 10;
+                }
+                else if(this.cursors.up.isDown){
+                    dir = 'up';
+                    bx -= 10;
+                    by -= 50;
+                }
+                else if(this.cursors.right.isDown){
+                    dir = 'right';
+                    bx += 50;
+                    by -= 10;
+                }
+                else if(this.cursors.down.isDown){
+                    dir = 'down';
+                    bx -= 10;
+                    by += 50;
                 }
 
+                var bullet;
+
+                if(this.type ='Buckshot'){
+                    for(var t = 300; t<600; t+=100){
+                        bullet = this.bullets.getFirstDead();
+                        bullet.revive();
+                        bullet.reset(this.x,this.y);
+                        this.Buckshotfire(bx,by,bullet);
+
+                        switch (dir){
+                            case 'left':
+                                by += 10;
+                                break;
+                            case 'up':
+                                bx += 10
+                                break;
+                            case 'right':
+                                by += 10
+                                break;
+                            case 'down':
+                                bx += 10;
+                                break;
+                        }
+                    }
+                } else{
+
+                    bullet = this.bullets.getFirstDead();
+
+                    if(bullet != null){
+
+                        bullet.revive();
+                        bullet.reset(this.x,this.y);
+
+
+                        bullet.PlayerFire(dir);
+                    }
+                }
+
+                //take one bullet away from the current clip
+                this.currClip -= 1;
+
+                //reset last fired
+                this.lastFired = this.game.time.totalElapsedSeconds() + this.fireRate;
             } else if(this.currClip == 0){
                 this.Reload();
             }
@@ -95,3 +135,6 @@ Gun.prototype.Reload = function(){
     this.reloadTimer = this.game.time.totalElapsedSeconds() + this.reloadSpeed;
 }
 
+    Gun.prototype.Buckshotfire = function(x,y,bullet){
+    this.game.physics.arcade.moveToXY(bullet, x, y, bullet.speed);
+}

@@ -105,7 +105,7 @@ window.onload = function(){
             game.physics.arcade.collide(player.playerGun.bullets,enemyGroup, function(bullet, enemy){
                 bullet.damage(1);
                 enemy.damage(1);
-                console.log(enemy);
+                console.log(bullet);
             });
 
             game.physics.arcade.overlap(enemyGroup, player.meleeRange, PlayerMeleeEnemy);
