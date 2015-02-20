@@ -162,7 +162,7 @@ window.onload = function(){
 
         game.debug.body(player.meleeRange, 'rgba(255,255,0,1)', false);
 
-        //game.debug.bodyInfo(player, 0, 25);
+        game.debug.bodyInfo(player, 10, 25);
         //game.debug.bodyInfo(enemyGroup.getAt(0), 0, 175);
 
         game.debug.text(player.health, 10,10);

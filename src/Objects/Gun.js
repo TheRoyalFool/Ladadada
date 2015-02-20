@@ -46,50 +46,50 @@ Gun.prototype.update = function(){
                 var dir;
                 var bx = this.x;
                 var by = this.y;
+                var bxmin,bxmax,bymin,bymax = 0;
 
                 if(this.cursors.left.isDown){
                     dir = 'left';
-                    bx -= 50;
-                    by -= 10;
+                    bxmin = this.x - 30;
+                    bxmax = bxmin - 60;
+                    bymin = this.y - 30;
+                    bymax = bymin + 60;
                 }
                 else if(this.cursors.up.isDown){
                     dir = 'up';
-                    bx -= 10;
-                    by -= 50;
+                    bxmin = this.x - 30;
+                    bxmax = bxmin + 60;
+                    bymin = this.y - 30;
+                    bymax = bymin - 50;
                 }
                 else if(this.cursors.right.isDown){
                     dir = 'right';
-                    bx += 50;
-                    by -= 10;
+                    bxmin = this.x + 30;
+                    bxmax = bxmin + 50;
+                    bymin = this.y - 30;
+                    bymax = bymin + 50;
                 }
                 else if(this.cursors.down.isDown){
                     dir = 'down';
-                    bx -= 10;
-                    by += 50;
+                    bxmin = this.x - 30;
+                    bxmax = bxmin + 60;
+                    bymin = this.y + 30;
+                    bymax = bymin + 60;
                 }
 
                 var bullet;
 
                 if(this.type ='Buckshot'){
-                    for(var t = 300; t<600; t+=100){
+                    for(var t = 0; t < 6; t += 1){
                         bullet = this.bullets.getFirstDead();
-                        bullet.revive();
-                        bullet.reset(this.x,this.y);
-                        this.Buckshotfire(bx,by,bullet);
+                        if(bullet != null) {
+                            bullet.revive();
+                            bullet.reset(this.x, this.y);
+                            by = Math.random() * (bymax - bymin) + bymin;
+                            bx = Math.random() * (bxmax - bxmin) + bxmin;
 
-                        switch (dir){
-                            case 'left':
-                                by += 10;
-                                break;
-                            case 'up':
-                                bx += 10
-                                break;
-                            case 'right':
-                                by += 10
-                                break;
-                            case 'down':
-                                bx += 10;
-                                break;
+                            console.log(by + ' ' + bx);
+                            this.Buckshotfire(bx, by, bullet);
                         }
                     }
                 } else{
@@ -97,11 +97,8 @@ Gun.prototype.update = function(){
                     bullet = this.bullets.getFirstDead();
 
                     if(bullet != null){
-
                         bullet.revive();
                         bullet.reset(this.x,this.y);
-
-
                         bullet.PlayerFire(dir);
                     }
                 }
