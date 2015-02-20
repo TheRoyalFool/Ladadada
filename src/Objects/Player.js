@@ -10,6 +10,11 @@ Player = function(game, x, y, img, speed, jumpHeight) {
     //changing players starting health from 0 to 100
     this.health = 100;
 
+    this.animations.add('idle',[0,1,2,3,4,5,6,7], 8, true);
+    this.animations.add('move',[8,9,10,11,12,13,14,15], 8, true);
+    this.animations.add('slide',[16,17,18,19,20,21,22], 7);
+    this.animations.add('crouch',[24,25,26,27,28,29,30,31], 14, false);
+
     //'this' refers to the player, and this code is adding him to the games physics engine
     game.physics.enable(this, Phaser.Physics.ARCADE);
 
@@ -72,14 +77,22 @@ Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
+
+    if(this.animations.currentAnim.name != 'crouch')
+        this.animations.play('idle');
+
     /*
      * Using the players direction call the right slide direction.
      * This allows the player to dash quickly to one side every 3 seconds
      * once he double taps one of the movement keys.
      * Also this handles the players basic movement :)
      */
+
+
     if(this.LeftKey.isDown){
 
+        if(this.animations.currentAnim != 'slide')
+            this.animations.play('move');
         this.dir = 'left';
         this.body.velocity.x = -this.speed;
         this.scale.x = -1;
@@ -87,13 +100,15 @@ Player.prototype.update = function(){
         if(this.canSlide == true && this.LeftKey.timeDown+250 > this.game.time.now){
             this.slideCooldown  = this.game.time.totalElapsedSeconds() + 3;
             this.body.velocity.x = -this.speed*3;
+            this.animations.play('slide');
 
         } else {
             this.canSlide = false;
         }
 
     } else if(this.RightKey.isDown){
-
+        if(this.animations.currentAnim != 'slide')
+            this.animations.play('move');
         this.dir = 'right';
         this.body.velocity.x = this.speed;
         this.scale.x = 1;
@@ -101,6 +116,7 @@ Player.prototype.update = function(){
         if(this.canSlide == true && (this.RightKey.timeDown+250) > this.game.time.now){
             this.slideCooldown = this.game.time.totalElapsedSeconds() + 3;
             this.body.velocity.x = this.speed*3;
+            this.animations.play('slide');
 
         } else{
             this.canSlide = false;
@@ -151,11 +167,12 @@ Player.prototype.update = function(){
     }
 
     if(this.game.input.keyboard.isDown(Phaser.Keyboard.S)){
-        this.body.setSize(64 ,32, 0, 32);
-        this.loadTexture('playercrouched');
-    } else if(this.game.input.keyboard.justReleased(Phaser.Keyboard.S)){
+       // this.body.setSize(20 ,32, 0, 32);
+       this.animations.frame = 31;
+
+        } else if(this.game.input.keyboard.justReleased(Phaser.Keyboard.S)){
         this.body.setSize(64 ,64, 0, 0);
-        this.loadTexture(this.playerImg);
+        this.animations.play('idle');
     }
 
     this.playerGun.update();
@@ -178,6 +195,7 @@ Player.prototype.update = function(){
 
     this.playerGun.angle = angle - 360;
 */
+
 
 }
 
