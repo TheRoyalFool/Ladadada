@@ -29,6 +29,8 @@ window.onload = function(){
         //loads the example for the animation
         game.load.spritesheet('flare', 'assets/SolarFlare.png', 64, 64, 16);
 
+        game.load.spritesheet('playersheet', 'assets/player_sprite_sheet.png', 40, 64, 32,0,1);
+
     }
 
     //variable for player
@@ -200,7 +202,7 @@ window.onload = function(){
             //if the tile index is equal to one
             if(myTile.index == 1){
                 //create player and add him to the game and give him physics
-                player = new Player(game, myTile.worldX, myTile.worldY, 'playerimg', 300, 290);
+                player = new Player(game, myTile.worldX, myTile.worldY, 'playersheet', 300, 290);
                 game.add.existing(player);
             }
 
