@@ -80,7 +80,7 @@ Gun.prototype.update = function(){
                 var bullet;
 
                 if(this.type ='Buckshot'){
-                    for(var t = 0; t < 6; t += 1){
+                    for(var t = 0; t < 8; t += 1){
                         bullet = this.bullets.getFirstDead();
                         if(bullet != null) {
                             bullet.revive();
@@ -88,7 +88,7 @@ Gun.prototype.update = function(){
                             by = Math.random() * (bymax - bymin) + bymin;
                             bx = Math.random() * (bxmax - bxmin) + bxmin;
 
-                            console.log(by + ' ' + bx);
+                            console.log('fire');
                             this.Buckshotfire(bx, by, bullet);
                         }
                     }

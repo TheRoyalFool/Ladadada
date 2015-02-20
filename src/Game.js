@@ -98,6 +98,8 @@ window.onload = function(){
             player.onLadder = true;
         });
 
+        game.physics.arcade.collide(player.playerGun.bullets, player.playerGun.bullets)
+
         if(enemyGroup.length > 0){  //to fix a problem while testing, when there is no enemy on the map
 
             game.physics.arcade.collide(enemyGroup, layers[0]);
