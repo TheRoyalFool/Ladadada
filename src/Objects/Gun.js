@@ -13,7 +13,7 @@ Gun = function(game ,fireRate, reloadSpeed, clipSize, Dpb, x, y, img, type){
     this.bullets = game.add.group();
     for(var i = 0; i < this.clipSize; i++){
         //create a new bullet and add it to the bullets group
-        this.bullet = new Bullet(this.game, this.x, this.y, 'bull', 300);
+        this.bullet = new Bullet(this.game, this.x, this.y, 'bull', 300, this.dpb);
         this.bullets.add(this.bullet);
 
         this.bullet.kill();
@@ -79,7 +79,7 @@ Gun.prototype.update = function(){
 
                 var bullet;
 
-                if(this.type ='Buckshot'){
+                if(this.type == 'Buckshot'){
                     for(var t = 0; t < 6; t += 1){
                         bullet = this.bullets.getFirstDead();
                         if(bullet != null) {

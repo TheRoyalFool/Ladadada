@@ -33,25 +33,30 @@ Player = function(game, x, y, img, speed, jumpHeight) {
     this.addChild(this.meleeRange); //adds melee range to the player DisplayContainer
 
     //double jump ability variables
-    this.doubleJump = true; //this stores if the player has the double jump ability
+    this.doubleJump = false; //this stores if the player has the double jump ability
     this.jumps = 0; //how many times has the player jumped
     this.jumpsTimer = 0; //when was the last time the player hit the jump key
 
     //sliding ability variables
-    this.slide = true; //does the player have the slide ability
+    this.slide = false; //does the player have the slide ability
     this.canSlide = false;
     this.slideCooldown = 0;
 
     //dont know if this is still going to be used
-    this.minorAbillityTag = "";
-    this.majorAbillityTag = "";
+    this.offensiveAbilityTag = "Infect";
+    this.defensiveAbilityTag = "";
 
-    //dont know about this either, still to be completed
-    this.majorAbility = game.add.sprite(0, 0, null);
-    this.minorAbility = game.add.sprite(0, 0, null);
-    this.addChild(this.majorAbility);
-    this.addChild(this.minorAbility);
-    //till here
+    this.offensiveAbility = game.add.sprite(0, 0, null);
+    this.defensiveAbility = game.add.sprite(0, 0, null);
+    this.addChild(this.defensiveAbility);
+    this.addChild(this.offensiveAbility);
+
+    this.offensiveCD = false;
+    this.defensiveCD = false;
+
+    this.offensiveAbilityActive = false;
+
+    this.ChangeOffensiveAbility();
 
     this.body.maxVelocity.y = 800;
 
@@ -61,13 +66,16 @@ Player = function(game, x, y, img, speed, jumpHeight) {
      *  players gun.
     */
     this.playerGun = new Gun(this.game, 0.1, 3, 10, 1,0,0,'bull');
-    this.ChangeGun("Buckshot");
+    this.ChangeGun("Potshot");
 
 
     this.LeftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.RightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
     this.UpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
     this.DownKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+
+    this.offensiveKey = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
+    this.defensiveKey = this.game.input.keyboard.addKey(Phaser.Keyboard.Q);
 
     //variable that stores if the player is currently hitting a ladder
     this.onLadder = false;
@@ -88,16 +96,16 @@ Player.prototype.update = function(){
      * Also this handles the players basic movement :)
      */
 
-
     if(this.LeftKey.isDown){
 
         if(this.animations.currentAnim != 'slide')
             this.animations.play('move');
+
         this.dir = 'left';
         this.body.velocity.x = -this.speed;
         this.scale.x = -1;
         this.scale.y = 1;
-        if(this.canSlide == true && this.LeftKey.timeDown+250 > this.game.time.now){
+        if(this.canSlide == true && this.LeftKey.timeDown+250 > this.game.time.now && this.slide == true){
             this.slideCooldown  = this.game.time.totalElapsedSeconds() + 3;
             this.body.velocity.x = -this.speed*3;
             this.animations.play('slide');
@@ -109,11 +117,12 @@ Player.prototype.update = function(){
     } else if(this.RightKey.isDown){
         if(this.animations.currentAnim != 'slide')
             this.animations.play('move');
+
         this.dir = 'right';
         this.body.velocity.x = this.speed;
         this.scale.x = 1;
         this.scale.y = 1;
-        if(this.canSlide == true && (this.RightKey.timeDown+250) > this.game.time.now){
+        if(this.canSlide == true && (this.RightKey.timeDown+250) > this.game.time.now && this.slide == true){
             this.slideCooldown = this.game.time.totalElapsedSeconds() + 3;
             this.body.velocity.x = this.speed*3;
             this.animations.play('slide');
@@ -181,22 +190,6 @@ Player.prototype.update = function(){
 
     this.AbilityBehaviours();
 
-    /*
-    var deltaX = this.game.input.activePointer.worldX - this.x;
-    var deltaY = this.game.input.activePointer.worldY - this.y;
-    var angle = Math.atan2(deltaX, deltaY) * 180 / Math.PI; // Convert to radians
-
-    this.playerGun.x = this.x;
-    this.playerGun.y = this.y;
-    this.playerGun.pivot.x = -50;
-    this.playerGun.pivot.y = -50;
-
-    this.game.debug.text(angle, 10,20);
-
-    this.playerGun.angle = angle - 360;
-*/
-
-
 }
 
 //function for changing the players gun
@@ -214,45 +207,67 @@ Player.prototype.ChangeGun = function(gun){
             this.playerGun = new Gun(this.game, 3, 2, 5, 5,0,0,'bull','Bullseye');
             break;
         case "Potshot":
-            this.playerGun = new Gun(this.game, 0.5, 2, 12, 1,0,0,'bull','Potshot');
+            this.playerGun = new Gun(this.game, 0.5, 2, 12, 99,0,0,'bull','Potshot');
             break;
     }
     this.playerGun.anchor.setTo(.5,.5);
 }
 
-Player.prototype.ChangeAbility = function(){
+Player.prototype.ChangeOffensiveAbility = function(){
 
-    if(this.majorAbillityTag == "Flare"){
+    this.removeChild(this.offensiveAbility);
+    this.offensiveAbility.destroy();
+
+    if(this.offensiveAbilityTag == "Flare"){
         //sets up one ability sprite and the animation
-        this.majorAbility = this.game.add.sprite(0, 0, 'flare');
-        this.majorAbilityAnim = this.majorAbility.animations.add('flare');
-        this.majorAbility.visible = false;
+        this.offensiveAbility = this.game.add.sprite(0, 0, 'flare');
+        this.offensiveAbility.anchor.setTo(.5,.5);
+        this.offensiveAbilityAnim = this.offensiveAbility.animations.add('flare');
+        this.offensiveAbility.visible = false;
+        this.addChild(this.offensiveAbility);
+
+    } else if(this.offensiveAbilityTag == 'Powershot'){
+        this.offensiveAbility = this.game.add.sprite(0, 0, null);
+
+    } else if(this.offensiveAbilityTag == 'Infect'){
+        this.offensiveAbility = this.game.add.sprite(0, 0, null);
     }
 }
 
+var CDTimer;
 
 Player.prototype.AbilityBehaviours = function(){
 
-    if(this.game.input.keyboard.isDown(Phaser.Keyboard.E)){
 
+
+    if(this.offensiveKey.isDown == true){
+        if(this.offensiveAbilityTag == 'Flare'){
+            //check that the current major ability has an animation
+            if(this.offensiveAbilityAnim != null){
+
+                this.offensiveAbility.animations.play('flare', 8, false);
+                this.offensiveAbility.visible = true;
+            }
+        } else if(this.offensiveAbilityTag == 'Powershot' && this.offensiveCD == false){
+            this.offensiveAbilityActive = true;
+            CDTimer = this.game.time.totalElapsedSeconds() + 5;
+        } else if(this.offensiveAbilityTag == 'Infect' && this.offensiveCD == false){
+            this.offensiveAbilityActive = true;
+            CDTimer = this.game.time.totalElapsedSeconds() + 5;
+        }
     }
 
-    if(this.game.input.keyboard.isDown(Phaser.Keyboard.SHIFT)){
-        //check that the current major ability has an animation
-        if(this.majorAbilityAnim != null){
-
-            this.majorAbility.animations.play('flare', 8, false);
-            this.majorAbility.visible = true;
-
-            if(this.majorAbilityAnim.isFinished == true){
-                this.majorAbility.visible = false;
-            }
+    if(this.offensiveAbilityAnim != null)
+        if(this.offensiveAbilityAnim.isFinished == true && this.offensiveAbilityTag == 'Flare'){
+            this.offensiveAbility.visible = false;
         }
 
+    if(CDTimer > this.game.time.totalElapsedSeconds()){
+        this.offensiveCD = true;
+    } else {
+        this.offensiveCD = false;
     }
-    if(this.slide === true){
 
-    }
 }
 
 
@@ -277,13 +292,11 @@ Player.prototype.SlidingUpdate = function(){
 
         if((this.RightKey.timeDown+100) > this.game.time.now){
             if((this.RightKey.timeUp+100) > this.game.time.now){
-                console.log("can slide");
                 this.canSlide = true;
             }
         }
         if(this.LeftKey.timeDown+100 > this.game.time.now){
             if(this.LeftKey.timeUp+100 > this.game.time.now){
-                console.log("can slide");
                 this.canSlide = true;
             }
         }
