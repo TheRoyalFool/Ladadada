@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="76fd8fd1-e635-46d9-9eb8-b21597449b20" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Objects/Bullet.js" afterPath="$PROJECT_DIR$/src/Objects/Bullet.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Objects/Enemy.js" afterPath="$PROJECT_DIR$/src/Objects/Enemy.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/player_sprite_sheet.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Game.js" afterPath="$PROJECT_DIR$/src/Game.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Objects/Gun.js" afterPath="$PROJECT_DIR$/src/Objects/Gun.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Objects/Player.js" afterPath="$PROJECT_DIR$/src/Objects/Player.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -33,16 +31,16 @@
       <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="31" selection-start="646" selection-end="646" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="408">
+            <state line="15" column="31" selection-start="646" selection-end="646" vertical-scroll-proportion="-0.0" vertical-offset="255" max-vertical-offset="408">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Game.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Game.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="118" column="17" selection-start="4112" selection-end="4112" vertical-scroll-proportion="0.4730047" vertical-offset="1603" max-vertical-offset="4777">
+            <state line="31" column="93" selection-start="1269" selection-end="1269" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4692">
               <folding />
             </state>
           </provider>
@@ -51,7 +49,7 @@
       <file leaf-file-name="Ladder.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Objects/Ladder.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="1" selection-start="349" selection-end="349" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
+            <state line="13" column="1" selection-start="349" selection-end="349" vertical-scroll-proportion="0.0" vertical-offset="221" max-vertical-offset="323">
               <folding />
             </state>
           </provider>
@@ -60,16 +58,16 @@
       <file leaf-file-name="Item.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Objects/Item.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="35" selection-start="364" selection-end="364" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340">
+            <state line="12" column="35" selection-start="364" selection-end="364" vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="340">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Player.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Player.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Objects/Player.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="293" column="64" selection-start="10179" selection-end="10179" vertical-scroll-proportion="-21.16" vertical-offset="4452" max-vertical-offset="5304">
+            <state line="165" column="23" selection-start="5837" selection-end="5837" vertical-scroll-proportion="0.472" vertical-offset="2392" max-vertical-offset="5083">
               <folding />
             </state>
           </provider>
@@ -85,7 +83,7 @@
       <file leaf-file-name="Enemy.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Objects/Enemy.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="162" column="32" selection-start="5020" selection-end="5020" vertical-scroll-proportion="-41.28" vertical-offset="1722" max-vertical-offset="3145">
+            <state line="26" column="36" selection-start="837" selection-end="874" vertical-scroll-proportion="0.0" vertical-offset="442" max-vertical-offset="3128">
               <folding />
             </state>
           </provider>
@@ -94,7 +92,7 @@
       <file leaf-file-name="Bullet.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Objects/Bullet.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="19" selection-start="277" selection-end="277" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1105">
+            <state line="54" column="5" selection-start="956" selection-end="1325" vertical-scroll-proportion="0.0" vertical-offset="213" max-vertical-offset="1088">
               <folding />
             </state>
           </provider>
@@ -103,7 +101,7 @@
       <file leaf-file-name="Gun.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Objects/Gun.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="0" selection-start="316" selection-end="316" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2431">
+            <state line="36" column="0" selection-start="1039" selection-end="1039" vertical-scroll-proportion="0.0" vertical-offset="179" max-vertical-offset="2482">
               <folding />
             </state>
           </provider>
@@ -133,11 +131,11 @@
         <option value="$PROJECT_DIR$/src/Objects/Ability.js" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/src/Objects/Ladder.js" />
+        <option value="$PROJECT_DIR$/src/Objects/Enemy.js" />
         <option value="$PROJECT_DIR$/src/Objects/Bullet.js" />
         <option value="$PROJECT_DIR$/src/Objects/Gun.js" />
-        <option value="$PROJECT_DIR$/src/Objects/Player.js" />
-        <option value="$PROJECT_DIR$/src/Objects/Enemy.js" />
         <option value="$PROJECT_DIR$/src/Game.js" />
+        <option value="$PROJECT_DIR$/src/Objects/Player.js" />
       </list>
     </option>
   </component>
@@ -262,8 +260,8 @@
     <property name="options.lastSelected" value="vcs.Git" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="FullScreen" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -271,14 +269,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
-      <option name="VMOptions" />
-      <option name="arguments" />
-      <option name="filePath" />
-      <option name="scope" value="ALL" />
-      <option name="testName" />
-      <method />
-    </configuration>
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -289,8 +279,12 @@
       <option name="showConsoleOnStdOut" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
-      <envs />
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
       <method />
     </configuration>
     <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
@@ -298,6 +292,10 @@
       <setting name="settingsFile" value="" />
       <setting name="serverType" value="INTERNAL" />
       <setting name="preferredDebugBrowser" value="CHROME" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
@@ -358,9 +356,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.11544544" sideWeight="0.672586" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -428,21 +426,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/assets/player_sprite_sheet.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Objects/Gun.js">
+    <entry file="file://$PROJECT_DIR$/src/Objects/Item.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="316" selection-end="316" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2431">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Objects/Bullet.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="19" selection-start="277" selection-end="277" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1105">
+        <state line="12" column="35" selection-start="364" selection-end="364" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340">
           <folding />
         </state>
       </provider>
@@ -454,16 +440,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Objects/Item.js">
+    <entry file="file://$PROJECT_DIR$/src/Objects/Enemy.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="35" selection-start="364" selection-end="364" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340">
+        <state line="26" column="36" selection-start="837" selection-end="874" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3128">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Objects/Player.js">
+    <entry file="file://$PROJECT_DIR$/src/Objects/Bullet.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="293" column="64" selection-start="10179" selection-end="10179" vertical-scroll-proportion="-21.16" vertical-offset="4452" max-vertical-offset="5304">
+        <state line="54" column="5" selection-start="956" selection-end="1325" vertical-scroll-proportion="0.0" vertical-offset="213" max-vertical-offset="1088">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Objects/Gun.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="0" selection-start="1039" selection-end="1039" vertical-scroll-proportion="0.0" vertical-offset="179" max-vertical-offset="2482">
           <folding />
         </state>
       </provider>
@@ -473,16 +466,21 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Objects/Enemy.js">
+    <entry file="file://$PROJECT_DIR$/src/Game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="162" column="32" selection-start="5020" selection-end="5020" vertical-scroll-proportion="-41.28" vertical-offset="1722" max-vertical-offset="3145">
+        <state line="31" column="93" selection-start="1269" selection-end="1269" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4692">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Game.js">
+    <entry file="file://$PROJECT_DIR$/assets/player_sprite_sheet.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Objects/Player.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="118" column="17" selection-start="4112" selection-end="4112" vertical-scroll-proportion="0.4730047" vertical-offset="1603" max-vertical-offset="4777">
+        <state line="165" column="23" selection-start="5837" selection-end="5837" vertical-scroll-proportion="0.472" vertical-offset="2392" max-vertical-offset="5083">
           <folding />
         </state>
       </provider>

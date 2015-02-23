@@ -105,28 +105,22 @@ window.onload = function(){
             game.physics.arcade.collide(enemyGroup, layers[0]);
 
             game.physics.arcade.collide(player.playerGun.bullets,enemyGroup, function(bullet, enemy){
-                bullet.kill();
-
-                if(player.offensiveAbilityTag == 'Powershot' && player.offensiveAbilityActive == true){
-                    enemy.damage(player.playerGun.Dpb*3);
-                    console.log(player.playerGun.Dpb);
-                    player.offensiveAbilityActive = false;
-                }else if(player.offensiveAbilityTag == 'Infect' && player.offensiveAbilityActive == true){
-                    enemy.speed = enemy.speed/2;
-                    enemy.attackSpeed = enemy.attackSpeed*2;
-                    enemy.damage(player.playerGun.Dpb);
-                    player.offensiveAbilityActive = false;
-                }
-                else {
-                    enemy.damage(player.playerGun.Dpb);
-                }
-
+                bullet.damage(1);
+                enemy.damage(1);
+                console.log(bullet);
             });
 
             game.physics.arcade.overlap(enemyGroup, player.meleeRange, PlayerMeleeEnemy);
 
             //cycle through the enemy group
             for(var e = 0; e < enemyGroup.length; e++) {
+
+                //when an enemies health reaches 0 kill it and remove it from the group
+                if(enemyGroup.getAt(e).health <= 0) {
+                    enemyGroup.getAt(e).kill;
+                    enemyGroup.getAt(e).destroy();
+                    enemyGroup.remove(enemyGroup.getAt(e));
+                }
 
                 //check for collision between the player and the enemy bullets
                 game.physics.arcade.collide(enemyGroup.getAt(e).bullets, player,EnemyBulletHitPlayer);
@@ -168,7 +162,7 @@ window.onload = function(){
 
         game.debug.body(player.meleeRange, 'rgba(255,255,0,1)', false);
 
-        //game.debug.bodyInfo(player, 10, 25);
+        game.debug.bodyInfo(player, 10, 25);
         //game.debug.bodyInfo(enemyGroup.getAt(0), 0, 175);
 
         game.debug.text(player.health, 10,10);
@@ -219,6 +213,7 @@ window.onload = function(){
                     case 1: //flying
 
                         enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'flying', 250, 1, 3);
+
                         break;
                     case 2: //shooter
                         enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'shooter', 250, 1, 5);
@@ -227,7 +222,7 @@ window.onload = function(){
                         enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'melee', 250, 1, 4);
                         break;
                     case 4: //exploding
-                        enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'exploding', 250, 6, 6);
+                        enemiesToAdd[0] = new Enemy(game, myTile.worldX, myTile.worldY, 'enemyimg', 150, 'exploding', 250, 6);
                         break;
                 }
 

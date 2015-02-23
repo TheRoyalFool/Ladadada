@@ -9,7 +9,6 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight, dps, health){
     this.jumpHeight = jumpHeight;
     this.dps = dps;
     this.health = health;
-    this.attackSpeed = 1;
 
     game.physics.enable(this, Phaser.Physics.ARCADE);
     this.body.collideWorldBounds = true;
@@ -52,8 +51,6 @@ Enemy = function(game, x, y, img, speed, type, jumpHeight, dps, health){
     //set up the position of the sight sprite
     this.sight.y = 0 - (this.sight.body.height / 2) + (this.body.height/2);
 
-    this.infected = false;
-
 }
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
@@ -86,13 +83,14 @@ Enemy.prototype.Fire = function(dir){
     //allows the enemy to fire once every x seconds
     if(this.canAttack == true) {
 
+        console.log("Shoot!");
         //use the dir variable to fire the bullet in the right direction
         this.bullet = new Bullet(this.game, this.x + this.body.width / 2, this.y + this.body.height / 2, 'bull', 300, dir, this.dps);
         this.bullets.add(this.bullet);
 
         //reset last fired
         this.canAttack = false;
-        this.lastAttack = this.game.time.totalElapsedSeconds() + this.attackSpeed;
+        this.lastAttack = this.game.time.totalElapsedSeconds() + 1;
     }
 
 }
@@ -140,6 +138,7 @@ Enemy.prototype.followPlayer = function(player) {
 
 Enemy.prototype.SightBehaviour = function(playersX){
 
+    console.log(this.type);
     if(this.type == "flying"){
 
     }
@@ -170,7 +169,7 @@ Enemy.prototype.CollideBehaviour = function(player){
         if(this.canAttack == true){
             player.damage(this.dps);
             this.canAttack = false;
-            this.lastAttack = this.game.time.totalElapsedSeconds() + this.attackSpeed;
+            this.lastAttack = this.game.time.totalElapsedSeconds() + 1;
         }
     } else if(this.type == "exploding"){
         this.kill();

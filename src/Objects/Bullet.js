@@ -1,4 +1,4 @@
-Bullet = function(game, x, y, img, speed, dir, dpb){
+Bullet = function(game, x, y, img, speed, dir){
     Phaser.Sprite.call(this, game, x, y, img);
 
 
@@ -9,7 +9,6 @@ Bullet = function(game, x, y, img, speed, dir, dpb){
     this.dir = dir;
     this.anchor.x = 0.5;
     this.anchor.y = 0.5;
-    this.dpb = dpb;
 
     //add the bullet to the physics engine
     game.physics.enable(this, Phaser.Physics.ARCADE);
